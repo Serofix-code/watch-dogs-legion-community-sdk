@@ -96,5 +96,19 @@
     "related": ["type.photo_camera_manager", "call_chain.photo_camera.native_free_mode_activation", "call_chain.photo_camera.manager_lifecycle"],
     "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "Manager setup allocates 0x160 bytes, constructs and initializes the helper, then stores it at interface +0x318. Teardown calls the dedicated cleanup path before nulling +0x318 and invoking the helper's delete thunk; the type table is immediately followed by the PhotoCameraManager literal." }],
     "unknowns": ["Formal source-level class distinction from CPhotoCameraManager", "Event subscription interface type", "Transition-token service type", "Required callback thread"]
+  },
+  {
+    "id": "call_chain.photo_camera.component_manager_bridge",
+    "kind": "call_chain",
+    "name": "Photo-camera component-to-manager event bridge",
+    "summary": "A CPhotoCameraComponent event handler compares two statically initialized opaque discriminators and dispatches to the published manager interface's mode-aware notification or helper-state reset slots.",
+    "confidence": "confirmed",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "component", "manager", "event", "call-chain"],
+    "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
+    "offsets": { "componentConstructorRva": "0x32E7A30", "componentPrimaryVtableRva": "0xA110EB0", "componentSecondaryVtableRva": "0xA110D10", "eventHandlerRva": "0x32E7F40", "firstDiscriminatorRva": "0xB3BD070", "firstDiscriminatorValue": "0x60213267", "secondDiscriminatorRva": "0xB3BD074", "secondDiscriminatorValue": "0x5A1F5E67", "discriminatorInitializerRva": "0x331F48C", "managerInterfaceGlobalRva": "0xB487020", "modeAwareNotificationSlot": "0x98", "modeAwareNotificationRva": "0x33299F0", "helperStateResetSlot": "0xA0", "helperStateResetRva": "0x332A1D0", "helperStateResetField": "0x1C" },
+    "related": ["type.photo_camera_manager", "type.photo_camera_manager_runtime_helper", "call_chain.photo_camera.native_free_mode_activation", "call_chain.photo_camera.manager_lifecycle"],
+    "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-component-bridge.md", "notes": "The handler is present in the CPhotoCameraComponent table, compares the incoming 32-bit discriminator against two independently initialized values, loads the corrected published manager global, and tail-dispatches to slots +0x98 or +0xA0." }],
+    "unknowns": ["Symbolic names of both discriminators", "Producer of the incoming event", "Required callback thread", "Whether either branch is an app-level open or close request", "Runtime ordering relative to FreePhoto activation"]
   }
 ]
