@@ -29,6 +29,7 @@ Last updated: 2026-08-14.
 - The close event's cross-renderer manager, command, and conditional UI/state producers, plus its clone-and-retain ownership contract.
 - A cross-renderer ten-name smartphone Lua binding family, including unresolved activate/clear override and app-ID lookup operations.
 - FreePhoto component pitch/roll/yaw at `+0x70/+0x74/+0x78`, fixed by reflected speed/limit fields, dedicated accumulators, initialization copies, and quaternion-to-Euler extraction.
+- Cross-renderer `CCameraComponent` and separately named `CCameraFreeComponent` static leads, plus the DX11 `CCameraGameProcessingComponent` pre-physics, post-input, post-physics, and post-camera update registrations.
 
 ## Strongly inferred / inferred
 
@@ -62,6 +63,8 @@ Last updated: 2026-08-14.
 
 ## Camera result
 
-The first fully automatic scan reached one scalar after 85 exported stages, but the survivor oscillated only from approximately `367.0000` to `367.0078` across both axes and is classified as a false positive. Static tracing has now superseded that approach: the native free-photo-camera position is the three-float vector at component offset `+0x194`, with orientation angles at `+0x70`. Runtime activation and teardown validation remain outstanding.
+The first fully automatic scan reached one scalar after 85 exported stages, but the survivor oscillated only from approximately `367.0000` to `367.0078` across both axes and is classified as a false positive. Static tracing has now superseded that approach for Photo Mode: the native free-photo-camera position is the three-float vector at component offset `+0x194`, with orientation angles at `+0x70`.
+
+The detached-gameplay target is separate. `CCameraComponent`, `CCameraGameProcessingComponent`, and `CCameraFreeComponent` are now documented as static leads. Their live instances, transform layouts, owner edges, player-follow writer, activation, and cleanup remain unresolved. The companion must remain read-only for this route until those contracts are verified.
 
 Guiding question: **What systems have we not mapped yet?**

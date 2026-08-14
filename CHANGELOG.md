@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.22.0 — Gameplay Camera Component Leads
+
+- Added cross-renderer records for `CCameraComponent` and `CCameraFreeComponent`.
+- Added the DX11 normal-gameplay `CCameraGameProcessingComponent` and its four named update phases.
+- Distinguished the newly found `CCameraFreeComponent` from the validated Photo Mode `CCameraFreePhotoComponent`.
+- Recorded explicit unknowns for live instances, vtables, transforms, ownership, activation, and cleanup; no detached-freecam call recipe is claimed.
+
 ## v0.21.0 — Smartphone Lua Binding Surface
 
 - Added the cross-renderer ten-name smartphone Lua binding family.
