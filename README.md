@@ -58,7 +58,16 @@ for record in database.search("camera"):
 
 ## Current coverage
 
-The initial release documents the observed operative roster traversal, operative-manager capture signature, census name resolution, and the unresolved freecam system. It also records the completed automatic camera-calibration experiment as negative evidence: forcing horizontal and vertical movement into one surviving scalar selected a continuously changing false positive rather than a validated transform.
+The database currently documents:
+
+- operative roster and census traversal;
+- biography events, scalar statistics, packed appearance, perks, and contract schedules;
+- an engine-thread Lua command bridge and observed entity/world bindings;
+- active-player and map-waypoint coordinate capture;
+- guarded signatures and build-specific offsets;
+- negative reward and camera experiments, including why their apparent acknowledgements were insufficient.
+
+True freecam remains unresolved. The completed automatic camera-calibration experiment is retained as negative evidence: forcing horizontal and vertical movement into one surviving scalar selected a continuously changing false positive rather than a validated camera transform.
 
 See [RESEARCH_PROGRESS.md](RESEARCH_PROGRESS.md) and the [generated research index](docs/generated/RESEARCH_INDEX.md).
 
