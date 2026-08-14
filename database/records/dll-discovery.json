@@ -11,7 +11,21 @@
     "offsets": { "imageBase": "0x180000000", "sizeOfImage": "0x22A0B000", "peTimestamp": "0x653939C5" },
     "related": [],
     "evidence": [{ "type": "string_reference", "reference": "research/notes/dll-build-and-registries.md", "notes": "The module embeds changelist 2073645, branch //wd3-prod/milestone, milestone orwell-game-milestone-121, Uplay product 7017, and its build date." }],
-    "unknowns": ["Marketing patch number corresponding to this internal milestone", "DX12 module equivalence"]
+    "unknowns": ["Marketing patch number corresponding to this internal milestone", "Runtime equivalence with the mapped DX12 module"]
+  },
+  {
+    "id": "build.steam.dx12.cl2073645",
+    "kind": "build",
+    "name": "Steam DX12 changelist 2073645",
+    "summary": "Exact fingerprint and embedded product-version identity for the observed Steam DX12 engine module.",
+    "confidence": "confirmed",
+    "status": "usable",
+    "tags": ["build", "compatibility", "steam", "dx12"],
+    "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx12.dll", "moduleSha256": "E37381D67A7D7CDA377A90B05793E897A0D7321D1C568AD09C5882481AAC9EB6", "observed": "2026-08-14", "notes": "Embedded changelist 2073645 and milestone orwell-game-milestone-121; PE timestamp 2023-10-25 16:09:16 UTC." }],
+    "offsets": { "imageBase": "0x180000000", "sizeOfImage": "0x241F7000", "peTimestamp": "0x65393DAC" },
+    "related": ["build.steam.dx11.cl2073645", "system.camera.freecam.dx12_cl2073645"],
+    "evidence": [{ "type": "string_reference", "reference": "research/notes/photo-camera-dx12.md", "notes": "The module embeds the same changelist, branch, milestone, and product-version family as the fingerprinted DX11 module; its camera registrations and native lifecycle were independently traced." }],
+    "unknowns": ["Marketing patch number corresponding to this internal milestone", "Runtime equivalence with DX11", "Other-store DX12 fingerprints"]
   },
   {
     "id": "system.domino.mission_symbol_cluster",

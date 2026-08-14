@@ -2,7 +2,7 @@
 
 Last updated: 2026-08-14.
 
-## Confirmed for the observed Steam PC DX11 session
+## Confirmed for the observed Steam PC build family
 
 - Guarded operative-manager capture signature behavior.
 - Operative roster count, pointer array, and operative ID traversal.
@@ -12,6 +12,7 @@ Last updated: 2026-08-14.
 - Map-waypoint coordinate capture.
 - Biography event, age, income, and NPC status layouts with immediate readback.
 - Exact Steam DX11 module fingerprint, embedded changelist, milestone, and build date.
+- Exact Steam DX12 module fingerprint with the same changelist and milestone, plus an independently traced FreePhoto component, manager, activation chain, and ordered helper teardown.
 - `CPhotoCameraConfig` construction, destruction, factory, object size, and registration with `CCameraFreePhotoComponent`.
 - `CCameraFreePhotoComponent` object size, position vector, orientation block, speed/limit fields, backend handle, and update routine.
 - Phone/application enum value `16` maps to `PhotoCamera` in the observed build.
@@ -39,7 +40,7 @@ Last updated: 2026-08-14.
 - Recruitment insertion and ownership semantics.
 - Raw save codec, integrity rules, and safe cross-save operative transfer.
 - Complete Lua binding, event dispatch, UI factory, command, type, and reflection registries.
-- Per-build signature matrix and DX12/non-Steam fingerprints.
+- Per-build signature matrix beyond the mapped Steam DX11/DX12 camera paths, plus non-Steam fingerprints.
 - Complete entity ownership and lifetime rules for Lua-spawned objects.
 - Reward result/persistence acknowledgement separate from game-thread handoff.
 

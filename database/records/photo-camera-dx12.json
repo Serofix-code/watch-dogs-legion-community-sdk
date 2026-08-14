@@ -1,0 +1,16 @@
+[
+  {
+    "id": "system.camera.freecam.dx12_cl2073645",
+    "kind": "system",
+    "name": "DX12 FreePhoto native compatibility map",
+    "summary": "Static cross-renderer mapping confirms that the fingerprinted Steam DX12 module retains the DX11 FreePhoto object layouts and ordered lifecycle while using renderer-specific code RVAs, globals, tables, and action ID.",
+    "confidence": "confirmed",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "free-camera", "dx12", "compatibility"],
+    "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx12.dll", "moduleSha256": "E37381D67A7D7CDA377A90B05793E897A0D7321D1C568AD09C5882481AAC9EB6", "observed": "2026-08-14" }],
+    "offsets": { "componentFactoryRva": "0x3239320", "componentConstructorRva": "0x323A340", "componentDestructorRva": "0x323A5A0", "componentVtableRva": "0xA18B3C0", "componentObjectSize": "0x410", "quaternionToEulerRva": "0x323AC40", "transformUpdateRva": "0x323CC90", "updateCallbackRva": "0x323E060", "managerStartupRva": "0x321A770", "managerConstructorRva": "0x3320760", "managerInterfaceVtableRva": "0xA1A5C40", "managerPublishedGlobalRva": "0xB51C060", "managerSetupRva": "0x3326F90", "managerTeardownRva": "0x3327670", "freeModeToggleRva": "0x3326C90", "freeModeWrapperRva": "0x33295E0", "availabilityGuardRva": "0x33283C0", "helperConstructorRva": "0x33333A0", "helperInitializeRva": "0x3327410", "helperSetModeRva": "0x3327360", "helperCleanupRva": "0x3327BD0", "helperTypeTableRva": "0xA1A6000", "helperDeleteThunkRva": "0x346C380", "eventSubscriptionVtableRva": "0xA1A5FD0", "eventDispatchThunkRva": "0x3332AF0", "eventCallbackRva": "0x33365F0", "dispatcherRva": "0x3332B00", "dispatcherEndRva": "0x33332B8", "modeFiveBranchRva": "0x3332EF0", "activationCallSiteRva": "0x3332F2C", "activationCallerRva": "0x3336470", "freePhotoActionIdRva": "0xB453FB4", "freePhotoActionId": "0x5349BB24", "interfaceSubobject": "0x2E8", "helperPointer": "0x318", "pitch": "0x70", "roll": "0x74", "yaw": "0x78", "position": "0x194", "pitchAccumulator": "0x1BC", "rollAccumulator": "0x1C0", "yawAccumulator": "0x1C4", "movementInput": "0x21C", "pitchInput": "0x234", "yawInput": "0x238", "rollInput": "0x23C" },
+    "related": ["build.steam.dx12.cl2073645", "system.camera.freecam", "type.camera_free_photo_component", "type.photo_camera_manager", "type.photo_camera_manager_runtime_helper"],
+    "evidence": [{ "type": "cross_reference", "reference": "research/notes/photo-camera-dx12.md", "notes": "Independent DX12 reflection registrations, constructors, vtables, direct call sites, unwind-bounded dispatcher, action-ID references, setup, and ordered cleanup were traced in the exact fingerprinted module." }],
+    "unknowns": ["Runtime activation result", "Required callback thread", "Orientation sign conventions", "Interruption and save/load behavior", "Safe external invocation contract"]
+  }
+]

@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.12.0 — Cross-renderer FreePhoto Map
+
+- Added the exact Steam DX12 changelist-2073645 module fingerprint.
+- Independently mapped the DX12 FreePhoto component, manager, helper, event dispatcher, and activation chain.
+- Confirmed identical camera/helper object layouts and ordered cleanup semantics across DX11 and DX12.
+- Documented renderer-specific RVAs, globals, type tables, and differing raw action identifiers.
+- Kept runtime activation and companion integration under development pending live lifecycle validation.
+
 ## v0.11.0 — FreePhoto Input Observation
 
 - Mapped the FreePhoto component's pitch/yaw/roll input fields and contiguous movement-input vector.

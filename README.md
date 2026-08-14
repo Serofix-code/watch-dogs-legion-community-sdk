@@ -72,20 +72,20 @@ The database currently documents:
 - biography events, scalar statistics, packed appearance, perks, and contract schedules;
 - an engine-thread Lua command bridge and observed entity/world bindings;
 - active-player and map-waypoint coordinate capture;
-- an exact Steam DX11 build fingerprint and embedded product-version identity;
+- exact Steam DX11 and DX12 build fingerprints and embedded product-version identities;
 - a newly discovered Domino mission-operation cluster covering recruitment, operative availability, schedules, objectives, and persistence;
 - the built-in `CPhotoCameraConfig`, `CCameraFreePhotoComponent`, and `CPhotoCameraManager` runtime path;
 - the free-photo-camera position/orientation layout and native transform update path;
 - guarded signatures and build-specific offsets;
 - negative reward and camera experiments, including why their apparent acknowledgements were insufficient.
 
-The native free-photo-camera component and transform are mapped statically, together with the manager's guarded setup, teardown, requested-state wrapper, mode-5 event dispatcher, engine-owned activation caller, runtime-helper ownership, event subscription, and dedicated action-map selection. Component pitch, roll, and yaw are confirmed at `+0x70`, `+0x74`, and `+0x78`; their input and accumulator fields are also mapped. An opt-in read-only observer can locate exact-vtable component candidates and report live transform/input state plus the helper's mode, event subscription, and transition tokens. Public activation remains under development because the game-thread contract, orientation sign conventions, and interrupted teardown still require runtime validation. The earlier automatic calibration experiment is retained as useful negative evidence.
+The native free-photo-camera component and transform are mapped statically in the fingerprinted DX11 and DX12 modules, together with the manager's guarded setup, teardown, requested-state wrapper, mode-5 event dispatcher, engine-owned activation caller, runtime-helper ownership, event subscription, and dedicated action-map selection. Component pitch, roll, and yaw are confirmed at `+0x70`, `+0x74`, and `+0x78`; their input and accumulator fields are also mapped. The two renderers preserve object layout and cleanup ordering but use different RVAs, globals, tables, and raw action IDs. An opt-in DX11 read-only observer can locate exact-vtable component candidates and report live transform/input state plus the helper's mode, event subscription, and transition tokens. Public activation remains under development because the game-thread contract, orientation sign conventions, and interrupted teardown still require runtime validation.
 
 See [RESEARCH_PROGRESS.md](RESEARCH_PROGRESS.md) and the [generated research index](docs/generated/RESEARCH_INDEX.md).
 
 ## Build compatibility
 
-Current observations target Steam PC DX11 changelist `2073645`, milestone `orwell-game-milestone-121`. The exact `DuniaDemo_clang_64_dx11.dll` SHA-256 is `086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E`. Compatibility with other distributions, renderers, or updates is **unknown**. Never upload a game module; submit only its digest and independently written evidence.
+Current camera observations cover Steam PC DX11 and DX12 changelist `2073645`, milestone `orwell-game-milestone-121`. Exact fingerprints are listed in [docs/BUILDS.md](docs/BUILDS.md). Runtime camera observation remains DX11-only; compatibility with other distributions or updates is **unknown**. Never upload a game module; submit only its digest and independently written evidence.
 
 ## Contributing
 

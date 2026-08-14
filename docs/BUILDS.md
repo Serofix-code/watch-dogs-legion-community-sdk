@@ -10,4 +10,13 @@
 - PE timestamp: 2023-10-25 17:52:37 UTC
 - Observed locally: 2026-08-14
 
-All current records target this exact module unless a record says otherwise. Compatibility with DX12, other stores, or other patches remains unknown. Submit module hashes only—never game modules.
+## Steam Windows x64 DX12 — changelist 2073645
+
+- Module: `DuniaDemo_clang_64_dx12.dll`
+- SHA-256: `E37381D67A7D7CDA377A90B05793E897A0D7321D1C568AD09C5882481AAC9EB6`
+- Internal milestone: `orwell-game-milestone-121`
+- Branch: `//wd3-prod/milestone`
+- PE timestamp: 2023-10-25 16:09:16 UTC
+- Observed locally: 2026-08-14
+
+The FreePhoto camera layout and lifecycle have been mapped statically in both modules. Runtime validation remains outstanding, and offsets/action identifiers are renderer-specific. Other stores and patches remain unknown. Submit module hashes only—never game modules.
