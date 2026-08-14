@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.9.0 — Native FreePhoto Activation Chain
+
+- Mapped the engine event callback and PE-unwind-bounded dispatcher that reach the FreePhoto path.
+- Mapped the unique mode-5 activation caller and its guarded manager-interface dispatch.
+- Improved direct relative-call discovery across executable sections containing inline data.
+- Kept external activation under development pending runtime thread, ownership, and teardown validation.
+
 ## v0.8.1 — Read-only Component Locator
 
 - Added an opt-in bounded scan for exact-vtable `CCameraFreePhotoComponent` candidates.

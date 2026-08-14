@@ -32,6 +32,8 @@ python tools/disassemble_range.py path/to/module.dll 0x18323CA60 0x280
 
 Keep published output tightly bounded to the evidence necessary for an independently written interoperability record.
 
+`find_relative_calls.py` scans executable bytes for `E8 rel32` candidates and validates each candidate as one exact five-byte Capstone instruction. This avoids losing valid calls when executable sections contain inline data. Results remain candidates because an `E8` byte can occur inside another instruction or embedded data; corroborate important hits from a known function boundary or PE unwind range.
+
 ## Focused FAT5 entry inspection
 
 `inspect_fat5_entry.py` resolves one known archive-relative name in a WDL FAT5 version-13 index. It can decode observed uncompressed and scheme-3 entries in memory and print only hashes plus explicitly filtered ASCII strings. It has no extraction/output option.

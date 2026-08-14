@@ -1,4 +1,4 @@
-"""Find direct x64 call sites targeting a virtual address in a local PE file."""
+"""Find direct x64 E8-relative call candidates targeting an address in a PE."""
 
 from __future__ import annotations
 
@@ -28,39 +28,45 @@ def main() -> int:
     decoder.detail = True
     count = 0
 
-    with args.binary.open("rb") as stream:
-        for section in pe.sections:
-            if not section.Characteristics & 0x20000000:  # IMAGE_SCN_MEM_EXECUTE
-                continue
-            section_rva = section.VirtualAddress
-            start_rva = max(section_rva, args.rva_start or section_rva)
-            end_rva = min(
-                section_rva + section.Misc_VirtualSize,
-                args.rva_end or section_rva + section.Misc_VirtualSize,
-            )
-            if start_rva >= end_rva:
-                continue
-            file_offset = section.PointerToRawData + (start_rva - section_rva)
-            stream.seek(file_offset)
-            data = stream.read(end_rva - start_rva)
-            for instruction in decoder.disasm(data, image_base + start_rva):
-                if instruction.mnemonic != "call" or len(instruction.operands) != 1:
-                    continue
-                operand = instruction.operands[0]
-                if operand.type != CS_OP_IMM or operand.imm != target:
-                    continue
-                raw = instruction.bytes.hex(" ")
-                rva = instruction.address - image_base
-                print(f"RVA=0x{rva:X} VA=0x{instruction.address:X} bytes={raw}")
-                count += 1
-                if count >= args.max_results:
-                    print(f"Stopped at --max-results={args.max_results}.")
-                    return 0
+    for section in pe.sections:
+        if not section.Characteristics & 0x20000000:  # IMAGE_SCN_MEM_EXECUTE
+            continue
+        section_rva = section.VirtualAddress
+        start_rva = max(section_rva, args.rva_start or section_rva)
+        end_rva = min(
+            section_rva + section.Misc_VirtualSize,
+            args.rva_end or section_rva + section.Misc_VirtualSize,
+        )
+        if start_rva >= end_rva:
+            continue
+        section_data = section.get_data()
+        relative_start = start_rva - section_rva
+        relative_end = min(end_rva - section_rva, len(section_data))
+        data = section_data[relative_start:relative_end]
+        position = data.find(b"\xE8")
+        while position >= 0:
+            if position + 5 <= len(data):
+                instruction_va = image_base + start_rva + position
+                displacement = int.from_bytes(data[position + 1:position + 5], "little", signed=True)
+                destination = instruction_va + 5 + displacement
+                if destination == target:
+                    decoded = next(decoder.disasm(data[position:position + 5], instruction_va), None)
+                    if decoded is not None and decoded.mnemonic == "call" and len(decoded.operands) == 1:
+                        operand = decoded.operands[0]
+                        if operand.type == CS_OP_IMM and operand.imm == target:
+                            raw = decoded.bytes.hex(" ")
+                            rva = decoded.address - image_base
+                            print(f"RVA=0x{rva:X} VA=0x{decoded.address:X} bytes={raw}")
+                            count += 1
+                            if count >= args.max_results:
+                                print(f"Stopped at --max-results={args.max_results}.")
+                                return 0
+            position = data.find(b"\xE8", position + 1)
 
     if not count:
-        print("No direct relative call sites found.")
+        print("No direct E8-relative call candidates found.")
         return 2
-    print(f"Found {count} direct call site(s).")
+    print(f"Found {count} direct E8-relative call candidate(s).")
     return 0
 
 

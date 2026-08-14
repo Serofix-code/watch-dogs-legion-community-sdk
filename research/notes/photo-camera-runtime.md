@@ -46,6 +46,16 @@ The native mode identity is now independently corroborated inside the runtime pa
 
 Two ordinary consumers at RVAs `0x3332BD9` and `0x3336C18` load the published manager interface global, preserve the `+0x2E8` subobject adjustment, and invoke vtable slot `+0x98` with a Boolean value. The slot resolves to RVA `0x33299F0`; it is mode-aware and treats current mode `5` specially, but it is a downstream notification/state handler rather than the guarded free-mode entry slot. This establishes a real post-startup consumer of the published interface while keeping activation and notification separate.
 
+### Native event activation chain
+
+PE unwind metadata bounds a native event dispatcher at RVA `0x33328D0` through `0x3333088`. A single direct caller at RVA `0x33365CE`, inside callback RVA `0x33363C0`, copies the incoming engine event to a local buffer before entering that dispatcher.
+
+The dispatcher branch beginning at RVA `0x3332CC0` first matches a build-specific action identifier and requires manager/controller byte `+0x38` to equal mode `5`. It asks RVA `0x332A080` to construct or publish value `4`, stores the returned token at controller offset `+0x154`, checks a native prerequisite, and calls RVA `0x3336240` from RVA `0x3332CFC`.
+
+RVA `0x3336240` is the first mapped engine-owned activation caller above the guarded manager wrapper. It resolves live services, retires any token held at controller `+0x154`, asks RVA `0x332A080` to publish value `5`, performs two further service checks, loads the published manager interface at RVA `0xB486020`, and invokes vtable slot `+0x28`. This connects an ordinary event path to the previously mapped FreePhoto toggle without bypassing its availability guard.
+
+This chain is **not yet a supported external call recipe**. The symbolic action name, callback thread, service contracts, ownership of the controller object, and interruption/teardown behavior remain unresolved. The separate `sta_open_photomode` string accessor has not been proven to name this action, so that association is intentionally not claimed.
+
 Manager code also publishes mode-change objects through `CPhotoCameraEventChannel`. This is downstream state notification, not sufficient evidence that publishing an event activates the camera.
 
 ## Independent schema corroboration
@@ -61,6 +71,6 @@ The application enum-to-string switch at RVA `0x3073F60` maps numeric value `16`
 This work replaces the unsuccessful global float-calibration approach with a concrete native component and transform map. The read-only observer can optionally locate exact-vtable component candidates and refresh their mapped transform fields. It is sufficient for targeted runtime observation, but not yet sufficient for a public trainer implementation. Required next evidence is:
 
 1. observe the published manager/interface pointer and state bytes in active gameplay;
-2. observe vtable slot `+0x28`, interface byte `+0x100`, and the component lifetime during an ordinary in-game photo-mode transition;
+2. observe event callback RVA `0x33363C0`, activation caller RVA `0x3336240`, vtable slot `+0x28`, interface byte `+0x100`, and the component lifetime during an ordinary in-game photo-mode transition;
 3. confirm orientation axis order and position changes while photo mode is active;
 4. confirm teardown after interruption and save/load transitions.
