@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.5.1 — Read-only Lifecycle Observer
+
+- Added a Windows runtime observer for the published photo-camera manager interface.
+- Opens the process with query/read access only and verifies the exact module hash and interface vtable.
+- Reports requested state, active state, and helper lifetime without injection or writes.
+
 ## v0.5.0 — Native Photo-camera Lifecycle
 
 - Mapped the manager interface's guarded setup and full teardown paths.
