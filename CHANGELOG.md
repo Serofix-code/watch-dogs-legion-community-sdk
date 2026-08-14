@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.4.1 — Cross-reference Tool Fix
+
+- Suppressed duplicate x64 references caused by decoding one byte into a REX-prefixed instruction.
+- Removed an unused cross-reference command-line option.
+
 ## v0.4.0 — Photo-camera Runtime Mapping
 
 - Corrected `FreeModeCamera` from an inferred enum value to a reflected configuration subsection.
