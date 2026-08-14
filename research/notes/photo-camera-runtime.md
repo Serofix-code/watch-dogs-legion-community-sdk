@@ -27,12 +27,15 @@ The position layout is confirmed as a contiguous three-float vector. The three o
 
 Startup code at RVA `0x321A540` allocates a `0x770`-byte manager and calls constructor RVA `0x3320530`. It publishes the interface subobject at `object + 0x2E8` through a build-specific global at RVA `0xB486020`. That address must not be treated as a stable public pointer until its lifetime is observed at runtime.
 
-The interface vtable at RVA `0xA116C00` contains a paired setup/teardown path:
+The interface vtable at RVA `0xA116C00` contains a paired setup/teardown path and a normal state-request wrapper:
 
-- slot `+0x08`, RVA `0x3326D60`, validates prerequisites, creates camera/controller resources, installs an action map, and sets the active byte at interface offset `+0x102`;
-- slot `+0x10`, RVA `0x3327440`, validates the same prerequisites, removes those resources, and clears `+0x102`.
+- slot `+0x08`, RVA `0x3326D60`, validates manager fields `+0x60` and `+0x180`, creates a `0x160`-byte helper at interface offset `+0x318`, installs camera/controller resources and an action map, then sets active byte `+0x102`;
+- slot `+0x10`, RVA `0x3327440`, requires those same prerequisites and active state, releases the helper and registered resources, then clears `+0x102`;
+- slot `+0x30`, RVA `0x3329400`, accepts a Boolean requested state, compares it with byte `+0x101`, adjusts from the interface subobject to the manager base, and tail-calls the internal toggle at RVA `0x3326870` only when a change is needed.
 
-These semantic names are **strongly inferred**, not runtime-confirmed. Calling either method externally without the correct game thread and gameplay state may be unsafe.
+The internal toggle changes manager byte `+0x3E9` (the same storage as interface byte `+0x101`), updates related gameplay/UI state, and calls the virtual setup or teardown method. This establishes slot `+0x30` as the closest mapped route to the engine's own requested-state lifecycle. It is preferable to calling setup directly, but its public acquisition and thread contract are still not runtime-confirmed.
+
+Manager code also publishes mode-change objects through `CPhotoCameraEventChannel`. This is downstream state notification, not sufficient evidence that publishing an event activates the camera.
 
 ## Higher-level entry clue
 
@@ -42,7 +45,7 @@ The application enum-to-string switch at RVA `0x3073F60` maps numeric value `16`
 
 This work replaces the unsuccessful global float-calibration approach with a concrete native component and transform map. It is sufficient for targeted runtime observation, but not yet sufficient for a public trainer implementation. Required next evidence is:
 
-1. observe manager/interface lifetime in active gameplay;
-2. identify the normal app-level activation caller or validate the lifecycle call on the game thread;
+1. observe the published manager/interface pointer and state bytes in active gameplay;
+2. validate vtable slot `+0x30` on the game's existing update thread rather than a newly created thread;
 3. confirm orientation axis order and position changes while photo mode is active;
 4. confirm teardown after interruption and save/load transitions.

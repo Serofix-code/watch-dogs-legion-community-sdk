@@ -22,7 +22,7 @@
     "status": "under_development",
     "tags": ["camera", "photo-mode", "manager", "lifecycle"],
     "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
-    "offsets": { "startupRva": "0x321A540", "constructorRva": "0x3320530", "objectSize": "0x770", "interfaceSubobject": "0x2E8", "interfaceVtableRva": "0xA116C00", "publishedGlobalRva": "0xB486020", "enterCandidateRva": "0x3326D60", "teardownCandidateRva": "0x3327440" },
+    "offsets": { "startupRva": "0x321A540", "constructorRva": "0x3320530", "objectSize": "0x770", "interfaceSubobject": "0x2E8", "interfaceVtableRva": "0xA116C00", "publishedGlobalRva": "0xB486020", "setupRva": "0x3326D60", "teardownRva": "0x3327440", "stateRequestRva": "0x3329400" },
     "related": ["type.camera_free_photo_component", "call_chain.photo_camera.manager_lifecycle", "enum.phone_app.photo_camera"],
     "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "Startup allocates 0x770 bytes, invokes the constructor, and publishes the +0x2E8 interface; vtable slots perform guarded setup and teardown." }],
     "unknowns": ["Whether the published global is stable throughout gameplay", "Exact public activation caller", "Required thread", "Meaning of remaining vtable slots"]
@@ -31,15 +31,15 @@
     "id": "call_chain.photo_camera.manager_lifecycle",
     "kind": "call_chain",
     "name": "Photo-camera manager lifecycle",
-    "summary": "Strongly inferred native enter and teardown methods validate manager prerequisites, manage camera resources, and update an active-state byte.",
+    "summary": "The native interface exposes guarded setup, teardown, and requested-state methods; the state method routes through the manager's normal internal toggle instead of duplicating setup logic.",
     "confidence": "strongly_inferred",
     "status": "under_development",
     "tags": ["camera", "photo-mode", "lifecycle", "call-chain"],
     "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
-    "offsets": { "interfaceVtableEnterSlot": "0x08", "interfaceVtableTeardownSlot": "0x10", "enterCandidateRva": "0x3326D60", "teardownCandidateRva": "0x3327440", "activeState": "0x102" },
+    "offsets": { "interfaceVtableSetupSlot": "0x08", "interfaceVtableTeardownSlot": "0x10", "interfaceVtableStateRequestSlot": "0x30", "setupRva": "0x3326D60", "teardownRva": "0x3327440", "stateRequestRva": "0x3329400", "internalToggleRva": "0x3326870", "requestedState": "0x101", "activeState": "0x102", "helperPointer": "0x318" },
     "related": ["type.photo_camera_manager", "system.camera.freecam"],
-    "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "The paired vtable methods check the same prerequisites; setup installs resources and sets +0x102, while teardown reverses them and clears +0x102." }],
-    "unknowns": ["Public caller", "Gameplay-state preconditions", "Failure recovery", "Runtime confirmation of semantic names"]
+    "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "Setup installs the helper and resources before setting +0x102; teardown releases them and clears +0x102; the +0x30 wrapper checks +0x101 and enters the same internal toggle used by manager code." }],
+    "unknowns": ["External interface acquisition contract", "Required game thread", "Gameplay-state preconditions", "Failure recovery", "Runtime confirmation"]
   },
   {
     "id": "enum.phone_app.photo_camera",
