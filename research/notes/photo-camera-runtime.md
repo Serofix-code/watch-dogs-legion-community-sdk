@@ -14,9 +14,9 @@ Confirmed field consumers in this build include:
 
 | Component offset | Meaning | Evidence |
 | --- | --- | --- |
-| `+0x70` | orientation axis 0 (semantic name unresolved) | quaternion-to-Euler extraction and transform construction |
-| `+0x74` | pitch angle | quaternion-to-Euler middle-angle extraction and clamping against `fMinimumPitch`/`fMaximumPitch` |
-| `+0x78` | orientation axis 2 (semantic name unresolved) | quaternion-to-Euler extraction and transform construction |
+| `+0x70` | pitch angle | initialized from the pitch accumulator and rebuilt by quaternion-to-Euler extraction |
+| `+0x74` | roll angle | initialized from the roll accumulator and rebuilt by quaternion-to-Euler extraction |
+| `+0x78` | yaw angle | initialized from the yaw accumulator and rebuilt by quaternion-to-Euler extraction |
 | `+0x188` | maximum distance from player | reflected name and movement/clamp path |
 | `+0x18C` | camera move speed | reflected name and movement-vector multiplication |
 | `+0x194/+0x198/+0x19C` | camera position XYZ | copied into the internal transform and passed to the backend camera |
@@ -25,7 +25,7 @@ Confirmed field consumers in this build include:
 | `+0x280` | backend camera handle | null checks and virtual update calls |
 | `+0x290` | internal transform structure | transform builder destination |
 
-The position layout is confirmed as a contiguous three-float vector. RVA `0x323AA10` converts a quaternion to three Euler angles and stores them at `+0x70/+0x74/+0x78`. The middle result at `+0x74` is the pitch angle: the movement/orbit path clamps it directly against `fMinimumPitch` and `fMaximumPitch`. The semantic names for axes `+0x70` and `+0x78` remain unresolved because the engine's coordinate and quaternion convention is not yet runtime-correlated. The movement path multiplies the component input vector by `fCameraMoveSpeed`, applies the camera basis, and later evaluates the configured player-distance limit.
+The position layout is confirmed as a contiguous three-float vector. RVA `0x323AA10` converts a quaternion to three Euler angles and stores pitch, roll, and yaw at `+0x70/+0x74/+0x78` respectively. The mapping is independently fixed by the reflected field registrations and update path: `fPitchRotationSpeed` at `+0x1D8` updates accumulator `+0x1BC` and clamps it to `angMinimumPitchAngle`/`angMaximumPitchAngle` at `+0x1C8/+0x1CC`; `fRollRotationSpeed` at `+0x1E0` updates accumulator `+0x1C0` and clamps it to roll limits `+0x1D0/+0x1D4`; `fYawRotationSpeed` at `+0x1DC` updates accumulator `+0x1C4`. Initialization copies these accumulators to `+0x70/+0x74/+0x78` in the same order. Runtime sign and direction conventions remain to be correlated. The movement path multiplies the component input vector by `fCameraMoveSpeed`, applies the camera basis, and later evaluates the configured player-distance limit.
 
 ## CPhotoCameraManager
 

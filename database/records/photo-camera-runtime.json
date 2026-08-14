@@ -8,10 +8,10 @@
     "status": "under_development",
     "tags": ["camera", "photo-mode", "free-camera", "component"],
     "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
-    "offsets": { "factoryRva": "0x32390F0", "constructorRva": "0x323A110", "destructorRva": "0x323A370", "vtableRva": "0xA0FC380", "objectSize": "0x410", "orientationAxis0": "0x70", "pitch": "0x74", "orientationAxis2": "0x78", "maxDistanceFromPlayer": "0x188", "cameraMoveSpeed": "0x18C", "position": "0x194", "minimumPitch": "0x1C8", "maximumPitch": "0x1CC", "orbitMovementSpeed": "0x1F4", "backendHandle": "0x280", "internalTransform": "0x290", "quaternionToEulerRva": "0x323AA10", "updateCallbackRva": "0x323DE30", "transformUpdateRva": "0x323CA60" },
+    "offsets": { "factoryRva": "0x32390F0", "constructorRva": "0x323A110", "destructorRva": "0x323A370", "vtableRva": "0xA0FC380", "objectSize": "0x410", "pitch": "0x70", "roll": "0x74", "yaw": "0x78", "maxDistanceFromPlayer": "0x188", "cameraMoveSpeed": "0x18C", "position": "0x194", "minimumPitch": "0x1C8", "maximumPitch": "0x1CC", "minimumRoll": "0x1D0", "maximumRoll": "0x1D4", "pitchRotationSpeed": "0x1D8", "yawRotationSpeed": "0x1DC", "rollRotationSpeed": "0x1E0", "orbitMovementSpeed": "0x1F4", "pitchAccumulator": "0x1BC", "rollAccumulator": "0x1C0", "yawAccumulator": "0x1C4", "backendHandle": "0x280", "internalTransform": "0x290", "quaternionToEulerRva": "0x323AA10", "updateCallbackRva": "0x323DE30", "transformUpdateRva": "0x323CA60" },
     "related": ["type.photo_camera_config", "type.photo_camera_manager", "system.camera.freecam"],
     "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "Constructor, reflected factory, vtable, scheduled callbacks, field consumers, and transform publication were traced in the exact fingerprinted module." }],
-    "unknowns": ["Semantic names for orientation axes +0x70 and +0x78", "Complete input-state layout", "Safe external ownership", "Runtime activation prerequisites"]
+    "unknowns": ["Complete input-state layout", "Safe external ownership", "Runtime activation prerequisites", "Runtime sign/direction convention for each orientation axis"]
   },
   {
     "id": "type.photo_camera_manager",

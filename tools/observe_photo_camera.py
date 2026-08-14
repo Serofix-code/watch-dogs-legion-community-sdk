@@ -239,9 +239,9 @@ def read_component(reader: Reader, address: int, expected_vtable: int) -> dict[s
     return {
         "address": f"0x{address:X}",
         "orientation": {
-            "axis0Unknown": orientation[0],
-            "pitch": orientation[1],
-            "axis2Unknown": orientation[2],
+            "pitch": orientation[0],
+            "roll": orientation[1],
+            "yaw": orientation[2],
         },
         "position": list(position_xyz),
         "maxDistanceFromPlayer": scalars[0],
