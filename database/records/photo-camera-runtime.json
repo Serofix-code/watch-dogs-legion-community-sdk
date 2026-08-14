@@ -178,5 +178,22 @@
     "related": ["call_chain.photo_camera.update_scheduler", "call_chain.photo_camera.manager_lifecycle", "call_chain.photo_camera.deferred_resource_ownership", "type.photo_camera_manager"],
     "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-registration-destruction.md", "notes": "Matching constructor/base-constructor and interface-delete/outer-destructor paths in both renderers insert and remove the manager from the same compact registry and preserve teardown-before-helper-release ordering." }],
     "unknowns": ["Formal registry type name", "How registry entries are transferred into the two update-phase lists", "Thread identity", "Behavior when destruction races an in-progress dispatcher", "Whether deferred resource release is guaranteed before world service destruction"]
+  },
+  {
+    "id": "call_chain.photo_camera.action_registration_lifecycle",
+    "kind": "call_chain",
+    "name": "Photo-camera action registration lifecycle",
+    "summary": "Helper setup and a dirty-flagged helper update are the only direct callers of the mode-dependent photo-camera action registration routine in both renderer builds.",
+    "confidence": "confirmed",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "free-camera", "input", "event", "registration", "lifecycle", "call-chain"],
+    "builds": [
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" },
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx12.dll", "moduleSha256": "E37381D67A7D7CDA377A90B05793E897A0D7321D1C568AD09C5882481AAC9EB6", "observed": "2026-08-14" }
+    ],
+    "offsets": { "selectedMode": "0x38", "registrationDirtyFlag": "0xF0", "eventSubscription": "0xD0", "dx11RegistrationRva": "0x33337A0", "dx11SetupCallSiteRva": "0x33273CE", "dx11UpdateCallSiteRva": "0x3323FD2", "dx11FreePhotoActionIdRva": "0xB3BEFB4", "dx11FreePhotoActionId": "0x81489DE8", "dx12RegistrationRva": "0x33339D0", "dx12SetupCallSiteRva": "0x33275FE", "dx12UpdateCallSiteRva": "0x3324202", "dx12FreePhotoActionIdRva": "0xB453FB4", "dx12FreePhotoActionId": "0x5349BB24", "modeSixActionId": "0xF6A2885B", "defaultActionId": "0x28033097" },
+    "related": ["type.photo_camera_manager_runtime_helper", "call_chain.photo_camera.native_free_mode_activation", "call_chain.photo_camera.manager_lifecycle", "system.camera.freecam"],
+    "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-action-registration.md", "notes": "Cross-renderer direct-call analysis finds only setup and dirty-flagged update callers; both registration routines select action identity from helper mode +0x38." }],
+    "unknowns": ["Symbolic action names", "Dirty-state callback producer", "Input/event service type", "Callback thread", "Safe external registration or activation contract"]
   }
 ]

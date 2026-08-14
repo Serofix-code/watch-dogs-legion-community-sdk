@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.18.0 — Photo-camera Action Registration
+
+- Mapped the mode-dependent action-registration routine in both renderer builds.
+- Confirmed helper setup and dirty-flagged helper update are its only direct callers.
+- Mapped the registration dirty flag and its immediate clear after update-time registration.
+- Recorded renderer-specific mode-5 identities and shared mode-6/default identities without inventing symbolic names.
+- Documented why direct registration is not a safe activation recipe.
+
 ## v0.17.0 — Scheduler Registration and Destruction
 
 - Mapped manager insertion/removal in the cross-renderer engine registry.
