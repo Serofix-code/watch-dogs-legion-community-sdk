@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.17.0 — Scheduler Registration and Destruction
+
+- Mapped manager insertion/removal in the cross-renderer engine registry.
+- Mapped the published-interface delete thunks and outer-manager destructors.
+- Confirmed normal manager teardown occurs before runtime-helper release.
+- Confirmed base registry removal and published-interface global clearing during destruction.
+- Retained explicit unknowns for phase-list transfer, callback thread, and destruction synchronization.
+
 ## v0.16.0 — Photo-camera Update Scheduler
 
 - Corrected four deferred-consumer/call-site RVAs that were missing one hexadecimal digit in v0.14.0 and v0.15.0 documentation.
