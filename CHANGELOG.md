@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.12.1 — DX11 Manager Global Correction
+
+- Corrected the DX11 published photo-camera manager-interface global from `0xB486020` to `0xB487020`.
+- Updated the read-only observer, database, generated index, and runtime note.
+- Added independent evidence from the startup store and numerous ordinary runtime consumers.
+
 ## v0.12.0 — Cross-renderer FreePhoto Map
 
 - Added the exact Steam DX12 changelist-2073645 module fingerprint.
