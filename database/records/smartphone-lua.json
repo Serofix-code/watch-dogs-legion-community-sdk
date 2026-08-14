@@ -1,0 +1,76 @@
+[
+  {
+    "id": "system.smartphone.lua_binding_family",
+    "kind": "system",
+    "name": "Smartphone Lua binding family",
+    "summary": "A contiguous cross-renderer binding-name family contains SmartphoneActivateOverride, SmartphoneClearOverride, four app-state setters, three state queries, and SmartphoneGetAppId.",
+    "confidence": "strongly_inferred",
+    "status": "unresolved",
+    "tags": ["lua", "smartphone", "ui", "application", "registry"],
+    "builds": [
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" },
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx12.dll", "moduleSha256": "E37381D67A7D7CDA377A90B05793E897A0D7321D1C568AD09C5882481AAC9EB6", "observed": "2026-08-14" }
+    ],
+    "offsets": { "dx11FirstNameRva": "0xA11F87F", "dx11LastNameRva": "0xA11F953", "dx12FirstNameRva": "0xA1AEABF", "dx12LastNameRva": "0xA1AEB93", "bindingNameCount": 10 },
+    "related": ["lua_api.smartphone_activate_override", "lua_api.smartphone_clear_override", "lua_api.smartphone_get_app_id", "enum.phone_app.photo_camera", "system.camera.freecam"],
+    "evidence": [{ "type": "string_reference", "reference": "research/notes/smartphone-lua-bindings.md", "notes": "The same ten names occur contiguously and in the same order in both exact renderer builds." }],
+    "unknowns": ["Registration records", "Native wrappers", "Parameter and return types", "Thread affinity", "Override ownership and cleanup", "Whether PhotoCamera is accepted by the override API"]
+  },
+  {
+    "id": "lua_api.smartphone_activate_override",
+    "kind": "lua_api",
+    "name": "SmartphoneActivateOverride",
+    "summary": "An unresolved smartphone override binding name present in matching DX11/DX12 Lua-name families; its arguments and effect on application launch are not yet proven.",
+    "confidence": "strongly_inferred",
+    "status": "unresolved",
+    "tags": ["lua", "smartphone", "ui", "application", "override"],
+    "builds": [
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" },
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx12.dll", "moduleSha256": "E37381D67A7D7CDA377A90B05793E897A0D7321D1C568AD09C5882481AAC9EB6", "observed": "2026-08-14" }
+    ],
+    "offsets": { "dx11NameRva": "0xA11F87F", "dx12NameRva": "0xA1AEABF" },
+    "returnType": "unknown",
+    "threading": "Unknown; external invocation is not claimed safe.",
+    "related": ["system.smartphone.lua_binding_family", "lua_api.smartphone_clear_override", "lua_api.smartphone_get_app_id", "enum.phone_app.photo_camera"],
+    "evidence": [{ "type": "string_reference", "reference": "research/notes/smartphone-lua-bindings.md", "notes": "Exact name is present at matching positions in the cross-renderer smartphone binding-name family." }],
+    "unknowns": ["Parameters", "Return value", "Native wrapper", "Registration mechanism", "Thread affinity", "Accepted app identifier form", "Cleanup requirements"]
+  },
+  {
+    "id": "lua_api.smartphone_clear_override",
+    "kind": "lua_api",
+    "name": "SmartphoneClearOverride",
+    "summary": "An unresolved companion name to SmartphoneActivateOverride that may represent the corresponding ownership reset, but its native lifecycle is not yet mapped.",
+    "confidence": "strongly_inferred",
+    "status": "unresolved",
+    "tags": ["lua", "smartphone", "ui", "application", "override", "cleanup"],
+    "builds": [
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" },
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx12.dll", "moduleSha256": "E37381D67A7D7CDA377A90B05793E897A0D7321D1C568AD09C5882481AAC9EB6", "observed": "2026-08-14" }
+    ],
+    "offsets": { "dx11NameRva": "0xA11F89A", "dx12NameRva": "0xA1AEADA" },
+    "returnType": "unknown",
+    "threading": "Unknown; external invocation is not claimed safe.",
+    "related": ["system.smartphone.lua_binding_family", "lua_api.smartphone_activate_override"],
+    "evidence": [{ "type": "string_reference", "reference": "research/notes/smartphone-lua-bindings.md", "notes": "Exact name immediately follows SmartphoneActivateOverride in both renderer binding-name families." }],
+    "unknowns": ["Parameters", "Return value", "Native wrapper", "Registration mechanism", "Thread affinity", "Whether it closes an app or only releases an override"]
+  },
+  {
+    "id": "lua_api.smartphone_get_app_id",
+    "kind": "lua_api",
+    "name": "SmartphoneGetAppId",
+    "summary": "An unresolved smartphone binding name that likely resolves an application identifier; accepted name/value forms and return type remain unverified.",
+    "confidence": "strongly_inferred",
+    "status": "unresolved",
+    "tags": ["lua", "smartphone", "ui", "application", "identifier"],
+    "builds": [
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" },
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx12.dll", "moduleSha256": "E37381D67A7D7CDA377A90B05793E897A0D7321D1C568AD09C5882481AAC9EB6", "observed": "2026-08-14" }
+    ],
+    "offsets": { "dx11NameRva": "0xA11F953", "dx12NameRva": "0xA1AEB93" },
+    "returnType": "unknown application identifier",
+    "threading": "Unknown; external invocation is not claimed safe.",
+    "related": ["system.smartphone.lua_binding_family", "lua_api.smartphone_activate_override", "enum.phone_app.photo_camera"],
+    "evidence": [{ "type": "string_reference", "reference": "research/notes/smartphone-lua-bindings.md", "notes": "Exact name terminates the same ten-name smartphone family in both renderer builds." }],
+    "unknowns": ["Parameters", "Return representation", "Native wrapper", "Registration mechanism", "Whether the string PhotoCamera is accepted", "Relationship to enum value 16"]
+  }
+]
