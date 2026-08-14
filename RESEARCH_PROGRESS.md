@@ -25,11 +25,11 @@ Last updated: 2026-08-14.
 - `TriggerRuleSmithRule` accepts candidate numeric rules, but independent progression readback is still required.
 - A contiguous Domino mission-operation cluster strongly indicates registration metadata for recruitment, operative, objective, persistence, and world operations; signatures and parameter descriptors remain unresolved.
 - `FreeModeCamera` is a reflected `PhotoCameraConfig` subsection, not an enum value.
-- `CPhotoCameraManager` startup publication, guarded setup/teardown, and requested-state wrapper are mapped. The wrapper routes through the engine's own internal toggle; interface acquisition and thread requirements still need runtime confirmation.
+- `CPhotoCameraManager` startup publication, guarded setup/teardown, requested-state wrapper, and distinct free-mode toggle wrapper are mapped. Interface slot `+0x28` routes through a guarded `+0x3E8` state transition; runtime and thread requirements still need confirmation.
 
 ## Unknown / unresolved
 
-- Safe photo-camera activation caller, game-thread contract, orientation axis order, and interruption/reset behavior.
+- Runtime result of the guarded free-mode wrapper, game-thread contract, orientation axis order, and interruption/reset behavior.
 - Recruitment insertion and ownership semantics.
 - Raw save codec, integrity rules, and safe cross-save operative transfer.
 - Complete Lua binding, event dispatch, UI factory, command, type, and reflection registries.

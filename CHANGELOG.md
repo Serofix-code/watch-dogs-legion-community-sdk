@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.6.0 — Guarded Free-mode Path
+
+- Mapped the guarded free-photo-mode interface method at vtable slot `+0x28`.
+- Distinguished the free-mode state at interface `+0x100` / manager `+0x3E8` from the ordinary requested state at `+0x101` / `+0x3E9`.
+- Extended the read-only observer to report the free-mode state.
+- Added bounded direct-call, vtable-call, encoded-reference, and PE-address inspection improvements for reproducible static research.
+- Corroborated the `FreeModeCamera` configuration subsection against pinned public Disrupt-tool schemas without importing proprietary game data.
+
 ## v0.5.1 — Read-only Lifecycle Observer
 
 - Added a Windows runtime observer for the published photo-camera manager interface.

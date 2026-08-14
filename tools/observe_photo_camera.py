@@ -199,6 +199,7 @@ def sample(reader: Reader, pid: int, module_base: int) -> dict[str, object]:
     result.update({
         "vtable": f"0x{vtable:X}",
         "expectedVtable": f"0x{module_base + MANAGER_INTERFACE_VTABLE_RVA:X}",
+        "freeModeState": bool(reader.u8(interface + 0x100)),
         "requestedState": bool(reader.u8(interface + 0x101)),
         "activeState": bool(reader.u8(interface + 0x102)),
         "helper": f"0x{reader.u64(interface + 0x318):X}",
