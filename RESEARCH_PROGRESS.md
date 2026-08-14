@@ -29,7 +29,7 @@ Last updated: 2026-08-14.
 - The close event's cross-renderer manager, command, and conditional UI/state producers, plus its clone-and-retain ownership contract.
 - A cross-renderer ten-name smartphone Lua binding family, including unresolved activate/clear override and app-ID lookup operations.
 - FreePhoto component pitch/roll/yaw at `+0x70/+0x74/+0x78`, fixed by reflected speed/limit fields, dedicated accumulators, initialization copies, and quaternion-to-Euler extraction.
-- Cross-renderer `CCameraComponent` and separately named `CCameraFreeComponent` static leads, plus the DX11 `CCameraGameProcessingComponent` pre-physics, post-input, post-physics, and post-camera update registrations.
+- Cross-renderer `CCameraComponent` and separately named `CCameraFreeComponent` static leads, plus the DX11 `CCameraGameProcessingComponent` pre-physics, post-input, post-physics, and post-camera update registrations. `CCameraFreeComponent` additionally exposes reflected pitch/yaw input, follow, pivot, collision, ideal-offset, reticle, lens, blending, and FOV parameter names.
 
 ## Strongly inferred / inferred
 

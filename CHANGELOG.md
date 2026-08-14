@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.23.0 — Gameplay Follow-Camera Surface
+
+- Mapped the reflected FOV, pitch/yaw input, rotation, follow, pivot, collision, ideal-offset, reticle, lens, and blending parameter surface associated with `CCameraFreeComponent`.
+- Added cross-renderer evidence that this is distinct from the Photo Mode component and is a strong normal player-follow camera lead.
+- Retained explicit unknowns for the live component instance, object layout, transform, owner edge, activation, and cleanup.
+
 ## v0.22.0 — Gameplay Camera Component Leads
 
 - Added cross-renderer records for `CCameraComponent` and `CCameraFreeComponent`.
