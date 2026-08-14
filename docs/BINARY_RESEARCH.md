@@ -32,6 +32,19 @@ python tools/disassemble_range.py path/to/module.dll 0x18323CA60 0x280
 
 Keep published output tightly bounded to the evidence necessary for an independently written interoperability record.
 
+## Focused FAT5 entry inspection
+
+`inspect_fat5_entry.py` resolves one known archive-relative name in a WDL FAT5 version-13 index. It can decode observed uncompressed and scheme-3 entries in memory and print only hashes plus explicitly filtered ASCII strings. It has no extraction/output option.
+
+```bash
+python -m pip install lz4
+python tools/inspect_fat5_entry.py path/to/common.fat \
+  'generated\\databases\\generic\\photocameraconfig_40469731.obj' \
+  --decode --contains PhotoCamera --contains FreeMode --max-results 20
+```
+
+Do not commit decoded objects, XML conversions, or archive bytes. Record only bounded interoperability facts and hashes.
+
 ## Read-only photo-camera runtime observation
 
 `observe_photo_camera.py` opens the game with query/read access only and validates the mapped manager interface against the exact supported module hash and vtable. It reports the distinct free-mode state, ordinary requested state, active state, and helper lifetime without allocating, injecting, hooking, suspending, changing protection, or writing.
