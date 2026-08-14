@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.15.0 — Deferred Resource Ownership
+
+- Traced the deferred request's paired resource acquire/release calls in DX11 and DX12.
+- Mapped active state, source handle, owned handle, and invalid-handle sentinel.
+- Mapped the prepare, acquire, and release virtual slots.
+- Confirmed that the deferred lifecycle owns an engine resource rather than only toggling state bytes.
+- Left the resource's formal type and semantic role unresolved pending runtime observation.
+
 ## v0.14.0 — Deferred Photo Request Lifecycle
 
 - Mapped the guarded higher-level photo-camera requester in DX11 and DX12.
