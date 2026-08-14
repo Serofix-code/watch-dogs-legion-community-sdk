@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.8.0 — Native FreePhoto Dispatch
+
+- Confirmed that native runtime paths publish FreePhoto mode `5`.
+- Mapped mode `5` to the dedicated `0x100000` setup action-map mask.
+- Mapped the broad free-mode availability guard at RVA `0x3328190`.
+- Distinguished rejection feedback and downstream mode notification from activation.
+- Documented post-startup consumers of the published manager interface.
+
 ## v0.7.0 — Photo-camera Archive Configuration
 
 - Added a no-output, single-entry FAT5 metadata and in-memory inspection tool.
