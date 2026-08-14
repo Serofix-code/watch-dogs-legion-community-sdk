@@ -12,6 +12,7 @@ import ctypes
 from ctypes import wintypes
 import hashlib
 import json
+import math
 from pathlib import Path
 import struct
 import sys
@@ -25,6 +26,7 @@ TH32CS_SNAPMODULE = 0x00000008
 TH32CS_SNAPMODULE32 = 0x00000010
 INVALID_HANDLE_VALUE = ctypes.c_void_p(-1).value
 MEM_COMMIT = 0x1000
+MEM_PRIVATE = 0x20000
 PAGE_GUARD = 0x100
 PAGE_NOACCESS = 0x01
 
@@ -32,6 +34,7 @@ EXPECTED_SHA256 = "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A00
 MODULE_NAME = "DuniaDemo_clang_64_dx11.dll"
 MANAGER_INTERFACE_GLOBAL_RVA = 0xB486020
 MANAGER_INTERFACE_VTABLE_RVA = 0xA116C00
+FREE_PHOTO_COMPONENT_VTABLE_RVA = 0xA0FC380
 
 
 class PROCESSENTRY32W(ctypes.Structure):
@@ -92,6 +95,15 @@ def arguments() -> argparse.Namespace:
     parser.add_argument("--interval", type=float, default=0.5)
     parser.add_argument("--skip-hash", action="store_true", help="Allow an unverified module build.")
     parser.add_argument("--json", action="store_true", help="Print one JSON object per sample.")
+    parser.add_argument(
+        "--scan-components", action="store_true",
+        help="Scan readable private memory once for engine-owned free-photo component candidates.",
+    )
+    parser.add_argument(
+        "--max-scan-mib", type=int, default=4096,
+        help="Maximum readable private memory inspected by --scan-components (default: 4096).",
+    )
+    parser.add_argument("--max-components", type=int, default=32)
     return parser.parse_args()
 
 
@@ -183,6 +195,108 @@ class Reader:
     def u64(self, address: int) -> int:
         return struct.unpack("<Q", self.read(address, 8))[0]
 
+    def regions(self):
+        address = 0
+        while True:
+            info = MEMORY_BASIC_INFORMATION()
+            queried = kernel32.VirtualQueryEx(
+                self.handle, ctypes.c_void_p(address), ctypes.byref(info), ctypes.sizeof(info)
+            )
+            if not queried:
+                return
+            base = int(info.BaseAddress or 0)
+            size = int(info.RegionSize)
+            if size <= 0:
+                return
+            yield base, size, int(info.State), int(info.Protect), int(info.Type)
+            next_address = base + size
+            if next_address <= address:
+                return
+            address = next_address
+
+
+def finite_vector(values: tuple[float, ...]) -> bool:
+    return all(math.isfinite(value) and abs(value) < 1.0e9 for value in values)
+
+
+def read_component(reader: Reader, address: int, expected_vtable: int) -> dict[str, object] | None:
+    if not reader.readable(address, 0x2A0):
+        return None
+    raw = reader.read(address, 0x2A0)
+    if struct.unpack_from("<Q", raw)[0] != expected_vtable:
+        return None
+    orientation = struct.unpack_from("<3f", raw, 0x70)
+    position_xyz = struct.unpack_from("<3f", raw, 0x194)
+    limits = struct.unpack_from("<2f", raw, 0x1C8)
+    scalars = (
+        struct.unpack_from("<f", raw, 0x188)[0],
+        struct.unpack_from("<f", raw, 0x18C)[0],
+        struct.unpack_from("<f", raw, 0x1F4)[0],
+    )
+    if not finite_vector(orientation + position_xyz + limits + scalars):
+        return None
+    return {
+        "address": f"0x{address:X}",
+        "orientation": list(orientation),
+        "position": list(position_xyz),
+        "maxDistanceFromPlayer": scalars[0],
+        "cameraMoveSpeed": scalars[1],
+        "minimumPitch": limits[0],
+        "maximumPitch": limits[1],
+        "orbitMovementSpeed": scalars[2],
+        "backendHandle": f"0x{struct.unpack_from('<Q', raw, 0x280)[0]:X}",
+    }
+
+
+def scan_components(
+    reader: Reader, module_base: int, max_scan_bytes: int, max_results: int
+) -> tuple[list[dict[str, object]], int, bool]:
+    """Locate exact component-vtable pointers without mutating the target process."""
+    needle = struct.pack("<Q", module_base + FREE_PHOTO_COMPONENT_VTABLE_RVA)
+    candidates: list[dict[str, object]] = []
+    seen: set[int] = set()
+    scanned = 0
+    reached_limit = False
+    chunk_size = 4 * 1024 * 1024
+
+    for base, size, state, protect, memory_type in reader.regions():
+        if state != MEM_COMMIT or memory_type != MEM_PRIVATE:
+            continue
+        if protect & (PAGE_GUARD | PAGE_NOACCESS):
+            continue
+        offset = 0
+        carry = b""
+        while offset < size:
+            remaining_budget = max_scan_bytes - scanned
+            if remaining_budget <= 0:
+                reached_limit = True
+                return candidates, scanned, reached_limit
+            length = min(chunk_size, size - offset, remaining_budget)
+            chunk_address = base + offset
+            try:
+                block = reader.read(chunk_address, length)
+            except (OSError, ValueError):
+                carry = b""
+                offset += length
+                continue
+            scanned += length
+            searchable = carry + block
+            searchable_base = chunk_address - len(carry)
+            position = searchable.find(needle)
+            while position >= 0:
+                address = searchable_base + position
+                if address % 8 == 0 and address not in seen:
+                    seen.add(address)
+                    candidate = read_component(reader, address, module_base + FREE_PHOTO_COMPONENT_VTABLE_RVA)
+                    if candidate is not None:
+                        candidates.append(candidate)
+                        if len(candidates) >= max_results:
+                            return candidates, scanned, reached_limit
+                position = searchable.find(needle, position + 1)
+            carry = searchable[-(len(needle) - 1):]
+            offset += length
+    return candidates, scanned, reached_limit
+
 
 def sample(reader: Reader, pid: int, module_base: int) -> dict[str, object]:
     global_address = module_base + MANAGER_INTERFACE_GLOBAL_RVA
@@ -216,6 +330,10 @@ def main() -> int:
     args = arguments()
     if args.interval < 0.05:
         raise SystemExit("--interval must be at least 0.05 seconds.")
+    if args.max_scan_mib < 1:
+        raise SystemExit("--max-scan-mib must be positive.")
+    if args.max_components < 1 or args.max_components > 256:
+        raise SystemExit("--max-components must be between 1 and 256.")
     pid = find_process(args.process)
     if pid is None:
         print(f"{args.process} is not running.", file=sys.stderr)
@@ -233,8 +351,34 @@ def main() -> int:
 
     reader = Reader(pid)
     try:
+        components = None
+        scan_metadata = None
+        if args.scan_components:
+            components, scanned, reached_limit = scan_components(
+                reader, module_base, args.max_scan_mib * 1024 * 1024, args.max_components
+            )
+            scan_metadata = {
+                "bytesScanned": scanned,
+                "reachedByteLimit": reached_limit,
+                "candidateCount": len(components),
+            }
         while True:
             current = sample(reader, pid, module_base)
+            if components is not None:
+                components = [
+                    refreshed
+                    for component in components
+                    if (refreshed := read_component(
+                        reader,
+                        int(str(component["address"]), 16),
+                        module_base + FREE_PHOTO_COMPONENT_VTABLE_RVA,
+                    )) is not None
+                ]
+                current["componentScan"] = {
+                    **scan_metadata,
+                    "activeCandidateCount": len(components),
+                }
+                current["componentCandidates"] = components
             if args.json:
                 print(json.dumps(current, sort_keys=True), flush=True)
             else:

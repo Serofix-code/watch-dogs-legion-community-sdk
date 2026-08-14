@@ -79,7 +79,7 @@ The database currently documents:
 - guarded signatures and build-specific offsets;
 - negative reward and camera experiments, including why their apparent acknowledgements were insufficient.
 
-The native free-photo-camera component and transform are mapped statically, together with the manager's guarded setup, teardown, requested-state wrapper, native mode-5 dispatch, and dedicated action-map selection. Public activation remains under development because manager lifetime, the game-thread contract, orientation order, and interrupted teardown still require runtime validation. The earlier automatic calibration experiment is retained as useful negative evidence.
+The native free-photo-camera component and transform are mapped statically, together with the manager's guarded setup, teardown, requested-state wrapper, native mode-5 dispatch, and dedicated action-map selection. An opt-in read-only observer can locate exact-vtable component candidates during a live session. Public activation remains under development because manager lifetime, the game-thread contract, orientation order, and interrupted teardown still require runtime validation. The earlier automatic calibration experiment is retained as useful negative evidence.
 
 See [RESEARCH_PROGRESS.md](RESEARCH_PROGRESS.md) and the [generated research index](docs/generated/RESEARCH_INDEX.md).
 

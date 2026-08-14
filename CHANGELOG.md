@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.8.1 — Read-only Component Locator
+
+- Added an opt-in bounded scan for exact-vtable `CCameraFreePhotoComponent` candidates.
+- Added structural validation and live transform-field refresh to the read-only observer.
+- Documented that manager setup dispatches through engine ownership instead of allocating the component directly.
+
 ## v0.8.0 — Native FreePhoto Dispatch
 
 - Confirmed that native runtime paths publish FreePhoto mode `5`.
