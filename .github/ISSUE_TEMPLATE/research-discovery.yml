@@ -1,0 +1,59 @@
+name: Research discovery
+description: Submit a new independently discovered symbol, system, signature, or behavior.
+title: "[Discovery]: "
+labels: [research]
+body:
+  - type: markdown
+    attributes:
+      value: Do not attach game binaries, saves, copyrighted assets, personal data, or credentials.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Record kind
+      options: [system, function, event, lua_api, command, ui, type, enum, hash, signature, build]
+    validations:
+      required: true
+  - type: input
+    id: build
+    attributes:
+      label: Game build
+      description: Distribution, renderer, version, and module digest when known.
+    validations:
+      required: true
+  - type: dropdown
+    id: confidence
+    attributes:
+      label: Proposed confidence
+      options: [UNKNOWN, INFERRED, STRONGLY INFERRED, CONFIRMED]
+    validations:
+      required: true
+  - type: textarea
+    id: claim
+    attributes:
+      label: Claim
+      description: State exactly what you believe was discovered.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Reproduction and evidence
+      description: Give non-proprietary steps and observations that another researcher can reproduce.
+    validations:
+      required: true
+  - type: textarea
+    id: unknowns
+    attributes:
+      label: Unknowns and failure cases
+      description: List uncertainty, negative results, and builds not tested.
+    validations:
+      required: true
+  - type: checkboxes
+    id: compliance
+    attributes:
+      label: Submission checks
+      options:
+        - label: I have not included proprietary game files, credentials, personal data, or copyrighted assets.
+          required: true
+        - label: I have separated observations from inference and have not fabricated missing details.
+          required: true
