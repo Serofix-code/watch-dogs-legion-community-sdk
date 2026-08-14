@@ -31,7 +31,7 @@ The same update path maps the live rotation inputs without relying on axis infer
 
 ## CPhotoCameraManager
 
-Startup code at RVA `0x321A540` allocates a `0x770`-byte manager and calls constructor RVA `0x3320530`. It publishes the interface subobject at `object + 0x2E8` through a build-specific global at RVA `0xB486020`. That address must not be treated as a stable public pointer until its lifetime is observed at runtime.
+Startup code at RVA `0x321A540` allocates a `0x770`-byte manager and calls constructor RVA `0x3320530`. It publishes the interface subobject at `object + 0x2E8` through a build-specific global at RVA `0xB487020`. That address must not be treated as a stable public pointer until its lifetime is observed at runtime.
 
 The interface vtable at RVA `0xA116C00` contains a paired setup/teardown path, a guarded free-mode toggle, and a normal camera-state request wrapper:
 
@@ -66,7 +66,7 @@ PE unwind metadata bounds a native event dispatcher at RVA `0x33328D0` through `
 
 The dispatcher branch beginning at RVA `0x3332CC0` first matches the build-specific action identifier stored at RVA `0xB3BEFB4` (`0x81489DE8` in the fingerprinted module) and requires helper byte `+0x38` to equal mode `5`. The setup/registration routine at RVA `0x33337A0` selects the same identifier for mode `5`. The symbolic action name remains unresolved. The branch asks RVA `0x332A080` to construct or publish value `4`, stores the returned token at helper offset `+0x154`, checks a native prerequisite, and calls RVA `0x3336240` from RVA `0x3332CFC`.
 
-RVA `0x3336240` is the first mapped engine-owned activation caller above the guarded manager wrapper. It resolves live services, retires any token held at controller `+0x154`, asks RVA `0x332A080` to publish value `5`, performs two further service checks, loads the published manager interface at RVA `0xB486020`, and invokes vtable slot `+0x28`. This connects an ordinary event path to the previously mapped FreePhoto toggle without bypassing its availability guard.
+RVA `0x3336240` is the first mapped engine-owned activation caller above the guarded manager wrapper. It resolves live services, retires any token held at controller `+0x154`, asks RVA `0x332A080` to publish value `5`, performs two further service checks, loads the published manager interface at RVA `0xB487020`, and invokes vtable slot `+0x28`. This connects an ordinary event path to the previously mapped FreePhoto toggle without bypassing its availability guard.
 
 This chain is **not yet a supported external call recipe**. The symbolic action name, callback thread, service contracts, ownership of the controller object, and interruption/teardown behavior remain unresolved. The separate `sta_open_photomode` string accessor has not been proven to name this action, so that association is intentionally not claimed.
 
