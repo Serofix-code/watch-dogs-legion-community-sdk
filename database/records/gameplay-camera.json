@@ -34,7 +34,7 @@
     "id": "type.camera_free_component",
     "kind": "type",
     "name": "CCameraFreeComponent",
-    "summary": "A cross-renderer, non-Photo-Mode-named camera-free component with an engine-owned UTDS update registration. It is a lead for detached gameplay-camera research, not a verified freecam implementation.",
+    "summary": "A cross-renderer, non-Photo-Mode-named camera-free component with an engine-owned UTDS update registration and a reflected follow/pivot/input/FOV parameter surface. It is a lead for detached gameplay-camera research, not a verified freecam implementation.",
     "confidence": "strongly_inferred",
     "status": "under_development",
     "tags": ["camera", "freecam", "gameplay", "component", "research"],
@@ -42,9 +42,9 @@
       { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14", "notes": "An @CameraFreeComponent literal and CCameraFreeComponent UTDS update registration are present in the exact DX11 module." },
       { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx12.dll", "moduleSha256": "E37381D67A7D7CDA377A90B05793E897A0D7321D1C568AD09C5882481AAC9EB6", "observed": "2026-08-14", "notes": "Matching @CameraFreeComponent and CCameraFreeComponent UTDS update-registration literals are present in the exact DX12 module." }
     ],
-    "offsets": { "dx11MarkerFileOffset": "0xA47DD37", "dx11UpdateRegistrationLiteralFileOffset": "0xA481A50", "dx12MarkerFileOffset": "0xA50CBC7", "dx12UpdateRegistrationLiteralFileOffset": "0xA5108E0" },
+    "offsets": { "dx11MarkerFileOffset": "0xA47DD37", "dx11InputYawSpeedLiteralFileOffset": "0xA47DEEF", "dx11FollowPitchYawLiteralFileOffset": "0xA47E10E", "dx11PivotLiteralFileOffset": "0xA47E375", "dx11UpdateRegistrationLiteralFileOffset": "0xA481A50", "dx12MarkerFileOffset": "0xA50CBC7", "dx12FollowPitchYawLagLiteralFileOffset": "0xA50CFE4", "dx12UpdateRegistrationLiteralFileOffset": "0xA5108E0" },
     "related": ["type.camera_component", "system.camera.gameplay_pipeline"],
-    "evidence": [{ "type": "cross_reference", "reference": "research/notes/gameplay-camera-components.md", "notes": "The exact component name and engine update-registration literal occur in both independently fingerprinted renderers; neither string includes PhotoCamera or FreePhoto." }],
+    "evidence": [{ "type": "cross_reference", "reference": "research/notes/gameplay-camera-components.md", "notes": "The exact component name and engine update-registration literal occur in both independently fingerprinted renderers. The DX11 reflected parameter surface names camera context, pitch/yaw input, rotation reference, follow, pivot, collision, ideal offsets, reticle, lens, and FOV controls; neither component name includes PhotoCamera or FreePhoto." }],
     "unknowns": ["Instance owner", "Vtable", "Object size", "Transform and input layouts", "Whether it is enabled in shipping gameplay", "Whether it can detach from an operative", "Activation API", "Cleanup lifecycle", "Safe external interaction"]
   },
   {

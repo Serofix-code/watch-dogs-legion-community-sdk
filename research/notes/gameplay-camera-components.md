@@ -30,6 +30,20 @@ Both exact renderer modules contain a component named `CCameraFreeComponent` wit
 
 This is a strong research lead for an independent gameplay free camera because it is named separately from the validated Photo Mode route. It is not evidence that the component is instantiated in normal Story Mode, that it is reachable externally, or that it can safely replace the operative-follow camera.
 
+### Reflected configuration surface
+
+The contiguous DX11 `CameraFreeComponent` parameter corpus starts at `0xA47DD37`. It names a `CameraContext`, `UpdateParameters`, FOV controls, pitch/yaw input controls, rotation constraints, following, pivoting, collision, ideal offsets, reticle placement, lens settings, and blending. In particular, it includes:
+
+- `fInputYawSpeed` and `fInputPitchSpeed`;
+- `selRotationReference`, yaw/pitch offsets, and yaw/roll/pitch bounds;
+- `bFollowPitch`, `bFollowYaw`, follow references, follow lag, follow delay, and follow speed thresholds;
+- pivot reference, pivot lag, pivot offsets, and optional female pivot offset;
+- collision radius/frustum radius/lag controls;
+- ideal camera offsets for left/right/front/back;
+- FOV interpolation, FOV acceleration, and FOV limits.
+
+The matching DX12 corpus includes `fFollowPYLag` at `0xA50CFE4`, in addition to the `CCameraFreeComponent` marker and update registration. These fields strongly support the interpretation that this component controls a normal player-following camera. The layout, runtime field offsets, and owning instance are still unknown.
+
 ## Next evidence required
 
 1. Recover the component's vtable, object size, and constructor/destructor from its reflection registration.
