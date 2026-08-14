@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.5.0 — Native Photo-camera Lifecycle
+
+- Mapped the manager interface's guarded setup and full teardown paths.
+- Mapped the Boolean requested-state wrapper and its normal internal toggle.
+- Identified requested state, active state, and helper-pointer offsets.
+- Documented `CPhotoCameraEventChannel` as downstream mode notification rather than an activation API.
+- Kept external activation under development pending game-thread and runtime-lifetime validation.
+
 ## v0.4.1 — Cross-reference Tool Fix
 
 - Suppressed duplicate x64 references caused by decoding one byte into a REX-prefixed instruction.

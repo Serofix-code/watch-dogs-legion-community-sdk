@@ -25,7 +25,7 @@ Last updated: 2026-08-14.
 - `TriggerRuleSmithRule` accepts candidate numeric rules, but independent progression readback is still required.
 - A contiguous Domino mission-operation cluster strongly indicates registration metadata for recruitment, operative, objective, persistence, and world operations; signatures and parameter descriptors remain unresolved.
 - `FreeModeCamera` is a reflected `PhotoCameraConfig` subsection, not an enum value.
-- `CPhotoCameraManager` startup publication and paired setup/teardown vtable methods are mapped; their semantic names and safe external calling contract still require runtime confirmation.
+- `CPhotoCameraManager` startup publication, guarded setup/teardown, and requested-state wrapper are mapped. The wrapper routes through the engine's own internal toggle; interface acquisition and thread requirements still need runtime confirmation.
 
 ## Unknown / unresolved
 
