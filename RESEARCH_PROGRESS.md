@@ -29,6 +29,7 @@ Last updated: 2026-08-14.
 - `FreeModeCamera` is a reflected `PhotoCameraConfig` subsection, not an enum value.
 - `CPhotoCameraManager` startup publication, guarded setup/teardown, requested-state wrapper, and distinct free-mode toggle wrapper are mapped. Interface slot `+0x28` routes through a broad availability guard and a `+0x3E8` state transition; runtime and thread requirements still need confirmation.
 - A native event callback, bounded dispatcher, mode-5 branch, and engine-owned activation caller are mapped through the guarded `+0x28` FreePhoto toggle. The symbolic action identity and safe external invocation contract remain unresolved.
+- The engine-owned `0x160`-byte runtime helper is mapped from construction through input/event subscription and transition-token cleanup; the read-only observer can validate these fields during a future live session.
 
 ## Unknown / unresolved
 

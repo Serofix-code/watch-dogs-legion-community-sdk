@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.9.1 — Runtime Helper Lifecycle
+
+- Identified and mapped the engine-owned `PhotoCameraManager` runtime helper created by outer manager setup.
+- Mapped its mode, input/context, event-subscription, transition-token, and ordered cleanup fields.
+- Extended the read-only observer to report the helper lifecycle without writing to the game.
+
 ## v0.9.0 — Native FreePhoto Activation Chain
 
 - Mapped the engine event callback and PE-unwind-bounded dispatcher that reach the FreePhoto path.

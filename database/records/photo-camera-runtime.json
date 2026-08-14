@@ -82,5 +82,19 @@
     "related": ["call_chain.photo_camera.free_mode_toggle", "type.photo_camera_manager", "type.camera_free_photo_component", "system.camera.freecam"],
     "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "PE unwind metadata bounds the dispatcher at 0x33328D0-0x3333088. Its unique direct mode-5 branch calls 0x3336240, which emits mode 5, performs engine service checks, loads the published manager interface, and calls vtable slot +0x28." }],
     "unknowns": ["Symbolic event/action name", "Required game thread", "Exact service-check semantics", "Runtime component creation result", "Safe external invocation and teardown"]
+  },
+  {
+    "id": "type.photo_camera_manager_runtime_helper",
+    "kind": "type",
+    "name": "PhotoCameraManager runtime helper",
+    "summary": "A 0x160-byte engine-owned helper created and initialized by CPhotoCameraManager setup; it owns the selected mode, input/context pointers, event subscription, and transition tokens used by the native FreePhoto activation path.",
+    "confidence": "confirmed",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "manager", "helper", "lifecycle", "input"],
+    "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
+    "offsets": { "objectSize": "0x160", "constructorRva": "0x3333170", "typeTableRva": "0xA116FC0", "deleteThunkRva": "0x346C150", "initializeRva": "0x33271E0", "setModeRva": "0x3327130", "cleanupRva": "0x33279A0", "inputService": "0x20", "cameraContext": "0x28", "selectedMode": "0x38", "primaryTransitionToken": "0xC8", "eventSubscription": "0xD0", "modeRegistrationEnabled": "0x120", "secondaryTransitionToken": "0x14C", "freeModeTransitionToken": "0x154" },
+    "related": ["type.photo_camera_manager", "call_chain.photo_camera.native_free_mode_activation", "call_chain.photo_camera.manager_lifecycle"],
+    "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "Manager setup allocates 0x160 bytes, constructs and initializes the helper, then stores it at interface +0x318. Teardown calls the dedicated cleanup path before nulling +0x318 and invoking the helper's delete thunk; the type table is immediately followed by the PhotoCameraManager literal." }],
+    "unknowns": ["Formal source-level class distinction from CPhotoCameraManager", "Event subscription interface type", "Transition-token service type", "Required callback thread"]
   }
 ]

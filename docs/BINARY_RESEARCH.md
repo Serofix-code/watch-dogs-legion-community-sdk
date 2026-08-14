@@ -49,7 +49,7 @@ Do not commit decoded objects, XML conversions, or archive bytes. Record only bo
 
 ## Read-only photo-camera runtime observation
 
-`observe_photo_camera.py` opens the game with query/read access only and validates the mapped manager interface against the exact supported module hash and vtable. It reports the distinct free-mode state, ordinary requested state, active state, and helper lifetime without allocating, injecting, hooking, suspending, changing protection, or writing.
+`observe_photo_camera.py` opens the game with query/read access only and validates the mapped manager interface against the exact supported module hash and vtable. It reports the distinct free-mode state, ordinary requested state, active state, and helper lifetime without allocating, injecting, hooking, suspending, changing protection, or writing. When the runtime helper exists, the observer also validates its exact type table and reports its selected mode, input/context pointers, event subscription, and three transition tokens.
 
 ```powershell
 python tools/observe_photo_camera.py
