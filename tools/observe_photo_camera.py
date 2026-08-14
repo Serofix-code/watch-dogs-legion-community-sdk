@@ -35,6 +35,7 @@ MODULE_NAME = "DuniaDemo_clang_64_dx11.dll"
 MANAGER_INTERFACE_GLOBAL_RVA = 0xB486020
 MANAGER_INTERFACE_VTABLE_RVA = 0xA116C00
 FREE_PHOTO_COMPONENT_VTABLE_RVA = 0xA0FC380
+PHOTO_CAMERA_HELPER_VTABLE_RVA = 0xA116FC0
 
 
 class PROCESSENTRY32W(ctypes.Structure):
@@ -248,6 +249,34 @@ def read_component(reader: Reader, address: int, expected_vtable: int) -> dict[s
     }
 
 
+def read_helper(reader: Reader, address: int, expected_vtable: int) -> dict[str, object] | None:
+    """Read the engine-owned 0x160-byte PhotoCameraManager runtime helper."""
+    if not address or not reader.readable(address, 0x160):
+        return None
+    raw = reader.read(address, 0x160)
+    vtable = struct.unpack_from("<Q", raw)[0]
+    if vtable != expected_vtable:
+        return {
+            "address": f"0x{address:X}",
+            "vtable": f"0x{vtable:X}",
+            "expectedVtable": f"0x{expected_vtable:X}",
+            "valid": False,
+        }
+    return {
+        "address": f"0x{address:X}",
+        "vtable": f"0x{vtable:X}",
+        "valid": True,
+        "inputService": f"0x{struct.unpack_from('<Q', raw, 0x20)[0]:X}",
+        "cameraContext": f"0x{struct.unpack_from('<Q', raw, 0x28)[0]:X}",
+        "selectedMode": raw[0x38],
+        "primaryTransitionToken": struct.unpack_from("<I", raw, 0xC8)[0],
+        "eventSubscription": f"0x{struct.unpack_from('<Q', raw, 0xD0)[0]:X}",
+        "modeRegistrationEnabled": bool(raw[0x120]),
+        "secondaryTransitionToken": struct.unpack_from("<I", raw, 0x14C)[0],
+        "freeModeTransitionToken": struct.unpack_from("<I", raw, 0x154)[0],
+    }
+
+
 def scan_components(
     reader: Reader, module_base: int, max_scan_bytes: int, max_results: int
 ) -> tuple[list[dict[str, object]], int, bool]:
@@ -310,17 +339,22 @@ def sample(reader: Reader, pid: int, module_base: int) -> dict[str, object]:
         result["reason"] = "manager interface is null or unreadable"
         return result
     vtable = reader.u64(interface)
+    helper = reader.u64(interface + 0x318)
     result.update({
         "vtable": f"0x{vtable:X}",
         "expectedVtable": f"0x{module_base + MANAGER_INTERFACE_VTABLE_RVA:X}",
         "freeModeState": bool(reader.u8(interface + 0x100)),
         "requestedState": bool(reader.u8(interface + 0x101)),
         "activeState": bool(reader.u8(interface + 0x102)),
-        "helper": f"0x{reader.u64(interface + 0x318):X}",
+        "helper": f"0x{helper:X}",
     })
     result["valid"] = vtable == module_base + MANAGER_INTERFACE_VTABLE_RVA
     if not result["valid"]:
         result["reason"] = "unexpected interface vtable"
+    elif helper:
+        result["helperState"] = read_helper(
+            reader, helper, module_base + PHOTO_CAMERA_HELPER_VTABLE_RVA
+        )
     return result
 
 
