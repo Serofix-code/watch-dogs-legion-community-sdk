@@ -11,6 +11,7 @@ Last updated: 2026-08-14.
 - Reticle-hit coordinates and active-player/world coordinate capture.
 - Map-waypoint coordinate capture.
 - Biography event, age, income, and NPC status layouts with immediate readback.
+- Exact Steam DX11 module fingerprint, embedded changelist, milestone, and build date.
 
 ## Strongly inferred / inferred
 
@@ -19,6 +20,8 @@ Last updated: 2026-08-14.
 - Contract and attendance traversal resolves participants and time ranges, but ownership and AI scheduling consequences remain unknown.
 - `ExecuteReward_V2` accepts readable ItemDB names, but queue consumption does not prove reward ownership.
 - `TriggerRuleSmithRule` accepts candidate numeric rules, but independent progression readback is still required.
+- A contiguous Domino mission-operation cluster strongly indicates registration metadata for recruitment, operative, objective, persistence, and world operations; signatures and parameter descriptors remain unresolved.
+- `PhotoCameraConfig` contains an explicit `FreeModeCamera` mode with movement actions, but its controller, numeric mode value, and activation path remain unknown.
 
 ## Unknown / unresolved
 
@@ -26,7 +29,7 @@ Last updated: 2026-08-14.
 - Recruitment insertion and ownership semantics.
 - Raw save codec, integrity rules, and safe cross-save operative transfer.
 - Complete Lua binding, event dispatch, UI factory, command, type, and reflection registries.
-- Exact module hashes and per-build signature matrix.
+- Per-build signature matrix and DX12/non-Steam fingerprints.
 - Complete entity ownership and lifetime rules for Lua-spawned objects.
 - Reward result/persistence acknowledgement separate from game-thread handoff.
 

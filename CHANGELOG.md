@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.3.0 — DLL Registration Research
+
+- Added the first exact module fingerprint and embedded build identity.
+- Added a bounded, read-only binary-string inspection tool.
+- Documented a contiguous Domino mission-scripting symbol cluster.
+- Added unresolved recruitment, operative-availability, recruitment-intel, and schedule-override symbols.
+- Documented `PhotoCameraConfig` and its explicit `FreeModeCamera` mode.
+- Expanded the evidence database from 22 to 38 records without uploading proprietary files or bulk strings.
+
 ## v0.2.0 — Runtime and Operative Systems Research
 
 - Expanded the evidence database from 4 to 22 records.
