@@ -15,6 +15,7 @@ Last updated: 2026-08-14.
 - `CPhotoCameraConfig` construction, destruction, factory, object size, and registration with `CCameraFreePhotoComponent`.
 - `CCameraFreePhotoComponent` object size, position vector, orientation block, speed/limit fields, backend handle, and update routine.
 - Phone/application enum value `16` maps to `PhotoCamera` in the observed build.
+- The fingerprinted archive config maps photo-camera modes Normal `0`, Selfie `1`, FreePhoto `5`, and PhotoBooth `6`; FreePhoto FOV is configured from `45` to `90`.
 
 ## Strongly inferred / inferred
 
@@ -30,6 +31,7 @@ Last updated: 2026-08-14.
 ## Unknown / unresolved
 
 - Runtime result of the guarded free-mode wrapper, game-thread contract, orientation axis order, and interruption/reset behavior.
+- Names and semantics for photo-camera mode values `2`, `3`, and `4`.
 - Recruitment insertion and ownership semantics.
 - Raw save codec, integrity rules, and safe cross-save operative transfer.
 - Complete Lua binding, event dispatch, UI factory, command, type, and reflection registries.

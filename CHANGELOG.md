@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.7.0 — Photo-camera Archive Configuration
+
+- Added a no-output, single-entry FAT5 metadata and in-memory inspection tool.
+- Documented the fingerprinted photo-camera config/menu records without committing extracted game data.
+- Confirmed photo-camera mode values Normal `0`, Selfie `1`, FreePhoto `5`, and PhotoBooth `6`.
+- Confirmed the FreePhoto FOV configuration range of `45` to `90`.
+
 ## v0.6.0 — Guarded Free-mode Path
 
 - Mapped the guarded free-photo-mode interface method at vtable slot `+0x28`.

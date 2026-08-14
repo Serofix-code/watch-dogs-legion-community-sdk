@@ -1,0 +1,30 @@
+[
+  {
+    "id": "enum.photo_camera.mode",
+    "kind": "enum",
+    "name": "Photo-camera mode",
+    "summary": "Archive configuration maps Normal=0, Selfie=1, FreePhoto=5, and PhotoBooth=6 for the observed Steam data build.",
+    "confidence": "confirmed",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "free-camera", "archive", "enum"],
+    "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "common.fat", "moduleSha256": "9DC03F7F06FDC6CCB06A871B5589565FD324BF93B30F674C3DD7A43186AA9614", "observed": "2026-08-14" }],
+    "offsets": { "normal": 0, "selfie": 1, "freePhoto": 5, "photoBooth": 6 },
+    "related": ["config.photo_camera.free_photo_fov", "call_chain.photo_camera.free_mode_toggle", "config.photo_camera.free_mode_section"],
+    "evidence": [{ "type": "readback", "reference": "research/notes/photo-camera-archive-config.md", "notes": "Bounded conversion of the fingerprinted photo-camera menu records binds named FOV variants to values 0, 1, 5, and 6." }],
+    "unknowns": ["Names for values 2, 3, and 4", "Runtime enum owner", "Whether every value remains valid in all gameplay states"]
+  },
+  {
+    "id": "config.photo_camera.free_photo_fov",
+    "kind": "system",
+    "name": "FreePhoto FOV configuration",
+    "summary": "The FreePhoto menu item is bound to photo-camera mode 5 with a configured player-editable FOV range of 45 to 90.",
+    "confidence": "confirmed",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "free-camera", "archive", "config", "fov"],
+    "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "common.fat", "moduleSha256": "9DC03F7F06FDC6CCB06A871B5589565FD324BF93B30F674C3DD7A43186AA9614", "observed": "2026-08-14" }],
+    "offsets": { "photoMode": 5, "minimumFov": 45, "maximumFov": 90 },
+    "related": ["enum.photo_camera.mode", "type.camera_free_photo_component", "call_chain.photo_camera.free_mode_toggle"],
+    "evidence": [{ "type": "readback", "reference": "research/notes/photo-camera-archive-config.md", "notes": "The decoded FOV.FreePhoto object identifies mode 5, minimum 45, maximum 90, editable=true, and use-game-camera-default=true." }],
+    "unknowns": ["Live configuration object address", "Runtime FOV storage", "Safe mutation and reset behavior"]
+  }
+]
