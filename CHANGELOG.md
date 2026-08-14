@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.13.0 — Photo-camera Component Bridge
+
+- Mapped the `CPhotoCameraComponent` constructor, vtable regions, and manager-facing event handler.
+- Confirmed two statically initialized opaque event discriminators.
+- Mapped their branches to manager interface slots `+0x98` and `+0xA0`.
+- Identified slot `+0xA0` as a helper-state reset at helper byte `+0x1C`.
+- Left event names and open/close semantics unresolved instead of guessing.
+
 ## v0.12.1 — DX11 Manager Global Correction
 
 - Corrected the DX11 published photo-camera manager-interface global from `0xB486020` to `0xB487020`.
