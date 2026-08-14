@@ -68,5 +68,19 @@
     "related": ["type.photo_camera_manager", "system.camera.freecam"],
     "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "The complete switch/jump-table mapping resolves case 16 to the PhotoCamera string." }],
     "unknowns": ["Application launch API", "Whether app launch is sufficient to create the free-camera component"]
+  },
+  {
+    "id": "call_chain.photo_camera.native_free_mode_activation",
+    "kind": "call_chain",
+    "name": "Native FreePhoto event activation",
+    "summary": "An engine event callback copies a camera event into a bounded dispatcher whose mode-5 branch performs native service checks and invokes the manager interface's guarded free-mode toggle.",
+    "confidence": "strongly_inferred",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "free-camera", "event", "activation", "call-chain"],
+    "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
+    "offsets": { "eventCallbackRva": "0x33363C0", "dispatcherRva": "0x33328D0", "dispatcherEndRva": "0x3333088", "modeFiveBranchRva": "0x3332CC0", "activationCallerRva": "0x3336240", "activationCallSiteRva": "0x3332CFC", "managerInterfaceGlobalRva": "0xB486020", "interfaceVtableToggleSlot": "0x28", "freePhotoModeValue": 5 },
+    "related": ["call_chain.photo_camera.free_mode_toggle", "type.photo_camera_manager", "type.camera_free_photo_component", "system.camera.freecam"],
+    "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "PE unwind metadata bounds the dispatcher at 0x33328D0-0x3333088. Its unique direct mode-5 branch calls 0x3336240, which emits mode 5, performs engine service checks, loads the published manager interface, and calls vtable slot +0x28." }],
+    "unknowns": ["Symbolic event/action name", "Required game thread", "Exact service-check semantics", "Runtime component creation result", "Safe external invocation and teardown"]
   }
 ]

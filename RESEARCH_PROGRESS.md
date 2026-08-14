@@ -28,10 +28,11 @@ Last updated: 2026-08-14.
 - A contiguous Domino mission-operation cluster strongly indicates registration metadata for recruitment, operative, objective, persistence, and world operations; signatures and parameter descriptors remain unresolved.
 - `FreeModeCamera` is a reflected `PhotoCameraConfig` subsection, not an enum value.
 - `CPhotoCameraManager` startup publication, guarded setup/teardown, requested-state wrapper, and distinct free-mode toggle wrapper are mapped. Interface slot `+0x28` routes through a broad availability guard and a `+0x3E8` state transition; runtime and thread requirements still need confirmation.
+- A native event callback, bounded dispatcher, mode-5 branch, and engine-owned activation caller are mapped through the guarded `+0x28` FreePhoto toggle. The symbolic action identity and safe external invocation contract remain unresolved.
 
 ## Unknown / unresolved
 
-- Runtime result of the guarded free-mode wrapper, game-thread contract, orientation axis order, and interruption/reset behavior.
+- Runtime result of the native activation chain and guarded free-mode wrapper, game-thread contract, orientation axis order, and interruption/reset behavior.
 - Names and semantics for photo-camera mode values `2`, `3`, and `4`.
 - Recruitment insertion and ownership semantics.
 - Raw save codec, integrity rules, and safe cross-save operative transfer.
