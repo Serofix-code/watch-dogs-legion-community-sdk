@@ -1,0 +1,58 @@
+[
+  {
+    "id": "type.camera_free_photo_component",
+    "kind": "type",
+    "name": "CCameraFreePhotoComponent",
+    "summary": "Native free-photo-camera component with a 0x410-byte object, transform state, input-controlled movement, and scheduled update callbacks.",
+    "confidence": "confirmed",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "free-camera", "component"],
+    "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
+    "offsets": { "factoryRva": "0x32390F0", "constructorRva": "0x323A110", "destructorRva": "0x323A370", "vtableRva": "0xA0FC380", "objectSize": "0x410", "orientation": "0x70", "maxDistanceFromPlayer": "0x188", "cameraMoveSpeed": "0x18C", "position": "0x194", "minimumPitch": "0x1C8", "maximumPitch": "0x1CC", "orbitMovementSpeed": "0x1F4", "backendHandle": "0x280", "internalTransform": "0x290", "updateCallbackRva": "0x323DE30", "transformUpdateRva": "0x323CA60" },
+    "related": ["type.photo_camera_config", "type.photo_camera_manager", "system.camera.freecam"],
+    "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "Constructor, reflected factory, vtable, scheduled callbacks, field consumers, and transform publication were traced in the exact fingerprinted module." }],
+    "unknowns": ["Orientation axis order", "Complete input-state layout", "Safe external ownership", "Runtime activation prerequisites"]
+  },
+  {
+    "id": "type.photo_camera_manager",
+    "kind": "type",
+    "name": "CPhotoCameraManager",
+    "summary": "Native photo-camera manager allocated during startup, with an interface subobject and guarded enter/teardown lifecycle methods.",
+    "confidence": "strongly_inferred",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "manager", "lifecycle"],
+    "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
+    "offsets": { "startupRva": "0x321A540", "constructorRva": "0x3320530", "objectSize": "0x770", "interfaceSubobject": "0x2E8", "interfaceVtableRva": "0xA116C00", "publishedGlobalRva": "0xB486020", "enterCandidateRva": "0x3326D60", "teardownCandidateRva": "0x3327440" },
+    "related": ["type.camera_free_photo_component", "call_chain.photo_camera.manager_lifecycle", "enum.phone_app.photo_camera"],
+    "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "Startup allocates 0x770 bytes, invokes the constructor, and publishes the +0x2E8 interface; vtable slots perform guarded setup and teardown." }],
+    "unknowns": ["Whether the published global is stable throughout gameplay", "Exact public activation caller", "Required thread", "Meaning of remaining vtable slots"]
+  },
+  {
+    "id": "call_chain.photo_camera.manager_lifecycle",
+    "kind": "call_chain",
+    "name": "Photo-camera manager lifecycle",
+    "summary": "Strongly inferred native enter and teardown methods validate manager prerequisites, manage camera resources, and update an active-state byte.",
+    "confidence": "strongly_inferred",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "lifecycle", "call-chain"],
+    "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
+    "offsets": { "interfaceVtableEnterSlot": "0x08", "interfaceVtableTeardownSlot": "0x10", "enterCandidateRva": "0x3326D60", "teardownCandidateRva": "0x3327440", "activeState": "0x102" },
+    "related": ["type.photo_camera_manager", "system.camera.freecam"],
+    "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "The paired vtable methods check the same prerequisites; setup installs resources and sets +0x102, while teardown reverses them and clears +0x102." }],
+    "unknowns": ["Public caller", "Gameplay-state preconditions", "Failure recovery", "Runtime confirmation of semantic names"]
+  },
+  {
+    "id": "enum.phone_app.photo_camera",
+    "kind": "enum",
+    "name": "PhotoCamera phone application",
+    "summary": "The phone/application enum-to-string mapping assigns PhotoCamera numeric value 16 in the observed build.",
+    "confidence": "confirmed",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "phone", "enum"],
+    "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
+    "offsets": { "value": 16, "enumToStringRva": "0x3073F60", "jumpTableRva": "0x3074060" },
+    "related": ["type.photo_camera_manager", "system.camera.freecam"],
+    "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "The complete switch/jump-table mapping resolves case 16 to the PhotoCamera string." }],
+    "unknowns": ["Application launch API", "Whether app launch is sufficient to create the free-camera component"]
+  }
+]

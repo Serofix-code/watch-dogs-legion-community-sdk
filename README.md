@@ -74,11 +74,12 @@ The database currently documents:
 - active-player and map-waypoint coordinate capture;
 - an exact Steam DX11 build fingerprint and embedded product-version identity;
 - a newly discovered Domino mission-operation cluster covering recruitment, operative availability, schedules, objectives, and persistence;
-- the built-in `PhotoCameraConfig` and its explicit `FreeModeCamera` mode;
+- the built-in `CPhotoCameraConfig`, `CCameraFreePhotoComponent`, and `CPhotoCameraManager` runtime path;
+- the free-photo-camera position/orientation layout and native transform update path;
 - guarded signatures and build-specific offsets;
 - negative reward and camera experiments, including why their apparent acknowledgements were insufficient.
 
-True freecam remains unresolved. The completed automatic camera-calibration experiment is retained as negative evidence: forcing horizontal and vertical movement into one surviving scalar selected a continuously changing false positive rather than a validated camera transform.
+The native free-photo-camera component and transform are now mapped statically. Public activation remains under development because the manager lifetime, game-thread contract, orientation order, and teardown behavior still require runtime validation. The earlier automatic calibration experiment is retained as useful negative evidence.
 
 See [RESEARCH_PROGRESS.md](RESEARCH_PROGRESS.md) and the [generated research index](docs/generated/RESEARCH_INDEX.md).
 

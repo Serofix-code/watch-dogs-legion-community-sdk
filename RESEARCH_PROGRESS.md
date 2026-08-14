@@ -12,6 +12,9 @@ Last updated: 2026-08-14.
 - Map-waypoint coordinate capture.
 - Biography event, age, income, and NPC status layouts with immediate readback.
 - Exact Steam DX11 module fingerprint, embedded changelist, milestone, and build date.
+- `CPhotoCameraConfig` construction, destruction, factory, object size, and registration with `CCameraFreePhotoComponent`.
+- `CCameraFreePhotoComponent` object size, position vector, orientation block, speed/limit fields, backend handle, and update routine.
+- Phone/application enum value `16` maps to `PhotoCamera` in the observed build.
 
 ## Strongly inferred / inferred
 
@@ -21,11 +24,12 @@ Last updated: 2026-08-14.
 - `ExecuteReward_V2` accepts readable ItemDB names, but queue consumption does not prove reward ownership.
 - `TriggerRuleSmithRule` accepts candidate numeric rules, but independent progression readback is still required.
 - A contiguous Domino mission-operation cluster strongly indicates registration metadata for recruitment, operative, objective, persistence, and world operations; signatures and parameter descriptors remain unresolved.
-- `PhotoCameraConfig` contains an explicit `FreeModeCamera` mode with movement actions, but its controller, numeric mode value, and activation path remain unknown.
+- `FreeModeCamera` is a reflected `PhotoCameraConfig` subsection, not an enum value.
+- `CPhotoCameraManager` startup publication and paired setup/teardown vtable methods are mapped; their semantic names and safe external calling contract still require runtime confirmation.
 
 ## Unknown / unresolved
 
-- True freecam transform, owner, writer call site, thread contract, and reset behavior.
+- Safe photo-camera activation caller, game-thread contract, orientation axis order, and interruption/reset behavior.
 - Recruitment insertion and ownership semantics.
 - Raw save codec, integrity rules, and safe cross-save operative transfer.
 - Complete Lua binding, event dispatch, UI factory, command, type, and reflection registries.
@@ -35,6 +39,6 @@ Last updated: 2026-08-14.
 
 ## Camera result
 
-The first fully automatic run reached one scalar after 85 exported stages, but the survivor oscillated only from approximately `367.0000` to `367.0078` across both camera axes. This is classified as a false-positive continuously changing value, not a validated camera field. Future scanning must preserve separate horizontal and vertical sets, enforce direction reversal, and rank adjacent transform clusters.
+The first fully automatic scan reached one scalar after 85 exported stages, but the survivor oscillated only from approximately `367.0000` to `367.0078` across both axes and is classified as a false positive. Static tracing has now superseded that approach: the native free-photo-camera position is the three-float vector at component offset `+0x194`, with orientation angles at `+0x70`. Runtime activation and teardown validation remain outstanding.
 
 Guiding question: **What systems have we not mapped yet?**
