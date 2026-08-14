@@ -6,7 +6,7 @@ from datetime import date
 
 from common import load_records
 
-KINDS = {"function", "event", "lua_api", "command", "ui", "type", "enum", "hash", "system", "signature", "offset", "call_chain"}
+KINDS = {"build", "function", "event", "lua_api", "command", "ui", "type", "enum", "hash", "system", "signature", "offset", "call_chain"}
 CONFIDENCE = {"confirmed", "strongly_inferred", "inferred", "unknown"}
 STATUS = {"usable", "experimental", "under_development", "unresolved", "deprecated"}
 EVIDENCE = {"runtime_observation", "signature_scan", "readback", "call_site", "string_reference", "cross_reference", "negative_result", "unknown"}

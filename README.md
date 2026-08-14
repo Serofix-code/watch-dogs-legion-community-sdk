@@ -42,6 +42,14 @@ python tools/check_broken_references.py
 python tools/generate_docs.py --check
 ```
 
+Read-only local binary research is supported without creating a string dump:
+
+```bash
+python tools/inspect_binary_strings.py path/to/module.dll --contains PhotoCamera --contains FreeModeCamera --max-results 100
+```
+
+The inspector requires explicit filters, caps output, and never writes extracted data. See [docs/BINARY_RESEARCH.md](docs/BINARY_RESEARCH.md).
+
 Python SDK example:
 
 ```python
@@ -64,6 +72,9 @@ The database currently documents:
 - biography events, scalar statistics, packed appearance, perks, and contract schedules;
 - an engine-thread Lua command bridge and observed entity/world bindings;
 - active-player and map-waypoint coordinate capture;
+- an exact Steam DX11 build fingerprint and embedded product-version identity;
+- a newly discovered Domino mission-operation cluster covering recruitment, operative availability, schedules, objectives, and persistence;
+- the built-in `PhotoCameraConfig` and its explicit `FreeModeCamera` mode;
 - guarded signatures and build-specific offsets;
 - negative reward and camera experiments, including why their apparent acknowledgements were insufficient.
 
@@ -73,7 +84,7 @@ See [RESEARCH_PROGRESS.md](RESEARCH_PROGRESS.md) and the [generated research ind
 
 ## Build compatibility
 
-Current live observations are from the Steam PC DX11 module `DuniaDemo_clang_64_dx11.dll` in August 2026. Its exact module SHA-256 has not yet been recorded, so compatibility with other distributions, renderers, or updates is **unknown**. Never upload a game module; submit only its digest and independently written evidence.
+Current observations target Steam PC DX11 changelist `2073645`, milestone `orwell-game-milestone-121`. The exact `DuniaDemo_clang_64_dx11.dll` SHA-256 is `086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E`. Compatibility with other distributions, renderers, or updates is **unknown**. Never upload a game module; submit only its digest and independently written evidence.
 
 ## Contributing
 

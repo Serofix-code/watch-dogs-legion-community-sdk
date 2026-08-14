@@ -7,7 +7,7 @@
   "required": ["id", "kind", "name", "summary", "confidence", "status", "builds", "evidence"],
   "properties": {
     "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)+$" },
-    "kind": { "enum": ["function", "event", "lua_api", "command", "ui", "type", "enum", "hash", "system", "signature", "offset", "call_chain"] },
+    "kind": { "enum": ["build", "function", "event", "lua_api", "command", "ui", "type", "enum", "hash", "system", "signature", "offset", "call_chain"] },
     "name": { "type": "string", "minLength": 1 },
     "summary": { "type": "string", "minLength": 1 },
     "confidence": { "enum": ["confirmed", "strongly_inferred", "inferred", "unknown"] },
