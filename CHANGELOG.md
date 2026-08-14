@@ -1,10 +1,15 @@
 # Changelog
 
+## v0.10.1 — Orientation Mapping Correction
+
+- Corrected the v0.10.0 preliminary pitch label: component `+0x70` is pitch, `+0x74` is roll, and `+0x78` is yaw.
+- Added the reflected pitch/yaw/roll speed offsets, pitch/roll limits, and dedicated angle accumulators that prove the mapping.
+- Corrected the read-only observer output and all current database/documentation records.
+
 ## v0.10.0 — FreePhoto Input and Pitch Mapping
 
-- Confirmed FreePhoto pitch at component offset `+0x74` from quaternion extraction and configured pitch clamping.
-- Kept orientation axes `+0x70` and `+0x78` unnamed pending runtime coordinate correlation.
-- Changed read-only component observations to expose the confirmed pitch separately from unresolved axes.
+- Published a preliminary FreePhoto orientation label that is corrected by v0.10.1.
+- Extended component observations with structured Euler-angle output.
 - Mapped the helper-owned input/event subscription object, dispatch thunk, owner back-pointer, and build-specific FreePhoto action identifier.
 - Kept companion integration disabled pending a live lifecycle observation.
 

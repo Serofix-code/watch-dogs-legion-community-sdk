@@ -18,7 +18,7 @@ Last updated: 2026-08-14.
 - The fingerprinted archive config maps photo-camera modes Normal `0`, Selfie `1`, FreePhoto `5`, and PhotoBooth `6`; FreePhoto FOV is configured from `45` to `90`.
 - The native free-mode and requested-state paths publish mode `5`, and setup maps mode `5` to the dedicated `0x100000` action-map mask.
 - The engine-owned `0x160`-byte runtime helper, its event-subscription owner edge, three transition tokens, selected-mode field, and ordered cleanup path.
-- FreePhoto component pitch at `+0x74`, derived from quaternion-to-Euler extraction and configured pitch clamping.
+- FreePhoto component pitch/roll/yaw at `+0x70/+0x74/+0x78`, fixed by reflected speed/limit fields, dedicated accumulators, initialization copies, and quaternion-to-Euler extraction.
 
 ## Strongly inferred / inferred
 
@@ -34,7 +34,7 @@ Last updated: 2026-08-14.
 
 ## Unknown / unresolved
 
-- Runtime result of the native activation chain and guarded free-mode wrapper, game-thread contract, semantic names for orientation axes `+0x70`/`+0x78`, and interruption/reset behavior. Pitch is confirmed at `+0x74`.
+- Runtime result of the native activation chain and guarded free-mode wrapper, game-thread contract, orientation sign/direction conventions, and interruption/reset behavior.
 - Names and semantics for photo-camera mode values `2`, `3`, and `4`.
 - Recruitment insertion and ownership semantics.
 - Raw save codec, integrity rules, and safe cross-save operative transfer.
