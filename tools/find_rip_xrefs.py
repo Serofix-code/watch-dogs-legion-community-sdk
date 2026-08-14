@@ -20,7 +20,6 @@ def arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("binary", type=Path)
     parser.add_argument("targets", nargs="+")
-    parser.add_argument("--context", type=int, default=3)
     parser.add_argument("--max-results", type=int, default=200)
     parser.add_argument("--section", action="append", default=[])
     parser.add_argument("--include-relative-branches", action="store_true")
@@ -59,7 +58,7 @@ def validate_candidate(
     include_relative_branches: bool,
 ):
     """Resolve a raw disp32 candidate back to a plausible RIP-relative instruction."""
-    seen: set[int] = set()
+    hits: list[tuple[object, set[int]]] = []
     for start in range(max(0, displacement - 14), displacement + 1):
         for instruction in decoder.disasm(code[start:min(len(code), displacement + 20)], va + start):
             relative_start = instruction.address - va
@@ -79,9 +78,22 @@ def validate_candidate(
                 destinations.update(
                     operand.imm for operand in instruction.operands if operand.type == X86_OP_IMM
                 )
-            if destinations & targets and instruction.address not in seen:
-                seen.add(instruction.address)
-                yield instruction, destinations & targets
+            if destinations & targets:
+                hits.append((instruction, destinations & targets))
+
+    # Starting the decoder one byte into a REX-prefixed instruction can produce
+    # a second, plausible 32-bit decoding with the same displacement. Prefer the
+    # earliest instruction whose byte span contains the later alternative.
+    accepted: list[tuple[object, set[int]]] = []
+    for instruction, matches in sorted(hits, key=lambda item: (item[0].address, -item[0].size)):
+        start = instruction.address
+        end = start + instruction.size
+        if any(existing.address <= start and end <= existing.address + existing.size for existing, _ in accepted):
+            continue
+        if any(existing.address == start for existing, _ in accepted):
+            continue
+        accepted.append((instruction, matches))
+    yield from accepted
 
 
 def main() -> int:
@@ -107,21 +119,21 @@ def main() -> int:
             for instruction, matches in validate_candidate(
                 decoder, code, va, displacement, targets, args.include_relative_branches
             ):
-              for destination in sorted(matches):
-                key = (instruction.address, destination)
-                if key in reported:
-                    continue
-                reported.add(key)
-                try:
-                    file_offset = pe.get_offset_from_rva(destination - image_base)
-                    target_label = f"VA=0x{destination:X} file=0x{file_offset:X}"
-                except pefile.PEFormatError:
-                    target_label = f"VA=0x{destination:X} (not file-backed)"
-                print(f"\nTarget {target_label}; reference in {section_name}")
-                print(f"> 0x{instruction.address:X}: {instruction.mnemonic:<8} {instruction.op_str}")
-                count += 1
-                if count >= args.max_results:
-                    return 0
+                for destination in sorted(matches):
+                    key = (instruction.address, destination)
+                    if key in reported:
+                        continue
+                    reported.add(key)
+                    try:
+                        file_offset = pe.get_offset_from_rva(destination - image_base)
+                        target_label = f"VA=0x{destination:X} file=0x{file_offset:X}"
+                    except pefile.PEFormatError:
+                        target_label = f"VA=0x{destination:X} (not file-backed)"
+                    print(f"\nTarget {target_label}; reference in {section_name}")
+                    print(f"> 0x{instruction.address:X}: {instruction.mnemonic:<8} {instruction.op_str}")
+                    count += 1
+                    if count >= args.max_results:
+                        return 0
 
     if not count:
         print("No RIP-relative executable references found.")
