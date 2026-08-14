@@ -27,6 +27,7 @@ Last updated: 2026-08-14.
 - Cross-renderer photo-camera action registration, including its setup/update callers, helper dirty flag, selected-mode field, and renderer-specific FreePhoto identities.
 - The registered zero-argument `RequestClosePhotoCamera` command and its matching cross-renderer event-emission path.
 - The close event's cross-renderer manager, command, and conditional UI/state producers, plus its clone-and-retain ownership contract.
+- A cross-renderer ten-name smartphone Lua binding family, including unresolved activate/clear override and app-ID lookup operations.
 - FreePhoto component pitch/roll/yaw at `+0x70/+0x74/+0x78`, fixed by reflected speed/limit fields, dedicated accumulators, initialization copies, and quaternion-to-Euler extraction.
 
 ## Strongly inferred / inferred
@@ -46,6 +47,7 @@ Last updated: 2026-08-14.
 - The deferred request is confirmed inside the engine-owned manager update and paired update-list dispatchers; formal phase names, callback thread, registration/removal operations, and its transition into FreePhoto mode `5` remain unresolved.
 - The deferred resource's formal type and whether it owns the app, input, world capability, or another prerequisite remain unresolved.
 - The formal scheduler registry type, transfer into the two phase lists, and destruction synchronization with an in-progress dispatcher remain unresolved.
+- The smartphone Lua family is present in both renderers, but its registration wrappers, parameters, return types, thread affinity, accepted app identifiers, and override cleanup remain unresolved.
 
 ## Unknown / unresolved
 

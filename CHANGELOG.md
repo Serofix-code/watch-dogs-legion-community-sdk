@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.21.0 — Smartphone Lua Binding Surface
+
+- Added the cross-renderer ten-name smartphone Lua binding family.
+- Added individual unresolved records for `SmartphoneActivateOverride`, `SmartphoneClearOverride`, and `SmartphoneGetAppId`.
+- Connected the binding family to the independently mapped `PhotoCamera` application enum as a research lead only.
+- Retained unknown parameters, return types, wrappers, thread affinity, and override cleanup instead of inventing a call recipe.
+
 ## v0.20.1 — Deferred-request RVA Correction
 
 - Corrected the DX11/DX12 deferred queue-setter RVAs to `0x3329390` and `0x33295C0`.
