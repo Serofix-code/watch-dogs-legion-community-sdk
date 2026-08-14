@@ -8,7 +8,7 @@ This release maps a higher-level, cross-renderer photo-camera request path that 
 - rejection feedback through manager slot `+0x88`;
 - accepted request through manager slot `+0x20`;
 - queue setter: DX11 `0x329390`, DX12 `0x3295C0`;
-- deferred consumer entry: DX11 `0x324370`, DX12 `0x3245A0`;
+- deferred consumer entry: DX11 `0x3324370`, DX12 `0x33245A0`;
 - interface request bytes `+0x330/+0x331/+0x333`, corresponding to manager `+0x618/+0x619/+0x61B`.
 
 The consumer checks live world/application services, branches on the request selector, and clears the pending flag after handling.

@@ -19,9 +19,9 @@ Because the interface subobject begins at outer-manager `+0x2E8`, these fields c
 
 ## Deferred consumer
 
-The later consumer entry is DX11 RVA `0x324370` and DX12 RVA `0x3245A0`. It checks manager pending byte `+0x61B`, resolves live world/application services, and rejects processing when the relevant world object or state mask is unavailable. It then branches on manager byte `+0x618`, performs branch-specific service checks and calls, and clears pending byte `+0x61B` before returning from the handled path.
+The later consumer entry is DX11 RVA `0x3324370` and DX12 RVA `0x33245A0`. It checks manager pending byte `+0x61B`, resolves live world/application services, and rejects processing when the relevant world object or state mask is unavailable. It then branches on manager byte `+0x618`, performs branch-specific service checks and calls, and clears pending byte `+0x61B` before returning from the handled path.
 
-The embedded `CPhotoCameraManager` update symbol family includes `UTDS::xxxUpdateDeferredPhotoRequest`, which strongly explains this routine's role. The static evidence does not establish the scheduler interface or exact callback thread, so an external game-thread call recipe is not claimed.
+The embedded `CPhotoCameraManager` update symbol family includes `UTDS::xxxUpdateDeferredPhotoRequest`, which strongly explains this routine's role. Cross-renderer direct-call and list-dispatch evidence now establishes its engine-owned update scheduling; see `photo-camera-update-scheduler.md`. The exact callback thread and public scheduling interface remain unknown, so an external game-thread call recipe is not claimed.
 
 ## Safety consequence
 
