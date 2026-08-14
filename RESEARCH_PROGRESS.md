@@ -24,6 +24,7 @@ Last updated: 2026-08-14.
 - The deferred request's paired resource owner, including active/source/owned-handle fields and virtual acquire/release hooks in both renderers.
 - The engine-owned manager update and paired list dispatchers that schedule the deferred consumer in both renderers.
 - Manager construction/destruction registration, including compact-registry insertion/removal, interface-adjusted deletion, normal teardown before helper release, and published-global clearing.
+- Cross-renderer photo-camera action registration, including its setup/update callers, helper dirty flag, selected-mode field, and renderer-specific FreePhoto identities.
 - FreePhoto component pitch/roll/yaw at `+0x70/+0x74/+0x78`, fixed by reflected speed/limit fields, dedicated accumulators, initialization copies, and quaternion-to-Euler extraction.
 
 ## Strongly inferred / inferred
@@ -37,6 +38,7 @@ Last updated: 2026-08-14.
 - `FreeModeCamera` is a reflected `PhotoCameraConfig` subsection, not an enum value.
 - `CPhotoCameraManager` startup publication, guarded setup/teardown, requested-state wrapper, and distinct free-mode toggle wrapper are mapped. Interface slot `+0x28` routes through a broad availability guard and a `+0x3E8` state transition; runtime and thread requirements still need confirmation.
 - A native event callback, bounded dispatcher, mode-5 branch, and engine-owned activation caller are mapped through the guarded `+0x28` FreePhoto toggle. The symbolic action identity and safe external invocation contract remain unresolved.
+- Photo-camera action registration is owned by helper setup and dirty-flagged update; the symbolic action names, dirty-callback producer, and safe public activation contract remain unresolved.
 - The component event bridge is mapped, but its two discriminator names and producer remain unresolved; neither is claimed as an open/close command.
 - The deferred request is confirmed inside the engine-owned manager update and paired update-list dispatchers; formal phase names, callback thread, registration/removal operations, and its transition into FreePhoto mode `5` remain unresolved.
 - The deferred resource's formal type and whether it owns the app, input, world capability, or another prerequisite remain unresolved.
