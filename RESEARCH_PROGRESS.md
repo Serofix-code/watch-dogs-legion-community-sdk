@@ -16,6 +16,7 @@ Last updated: 2026-08-14.
 - `CCameraFreePhotoComponent` object size, position vector, orientation block, speed/limit fields, backend handle, and update routine.
 - Phone/application enum value `16` maps to `PhotoCamera` in the observed build.
 - The fingerprinted archive config maps photo-camera modes Normal `0`, Selfie `1`, FreePhoto `5`, and PhotoBooth `6`; FreePhoto FOV is configured from `45` to `90`.
+- The native free-mode and requested-state paths publish mode `5`, and setup maps mode `5` to the dedicated `0x100000` action-map mask.
 
 ## Strongly inferred / inferred
 
@@ -26,7 +27,7 @@ Last updated: 2026-08-14.
 - `TriggerRuleSmithRule` accepts candidate numeric rules, but independent progression readback is still required.
 - A contiguous Domino mission-operation cluster strongly indicates registration metadata for recruitment, operative, objective, persistence, and world operations; signatures and parameter descriptors remain unresolved.
 - `FreeModeCamera` is a reflected `PhotoCameraConfig` subsection, not an enum value.
-- `CPhotoCameraManager` startup publication, guarded setup/teardown, requested-state wrapper, and distinct free-mode toggle wrapper are mapped. Interface slot `+0x28` routes through a guarded `+0x3E8` state transition; runtime and thread requirements still need confirmation.
+- `CPhotoCameraManager` startup publication, guarded setup/teardown, requested-state wrapper, and distinct free-mode toggle wrapper are mapped. Interface slot `+0x28` routes through a broad availability guard and a `+0x3E8` state transition; runtime and thread requirements still need confirmation.
 
 ## Unknown / unresolved
 

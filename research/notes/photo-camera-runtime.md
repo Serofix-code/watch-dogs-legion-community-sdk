@@ -38,6 +38,12 @@ The internal toggle changes manager byte `+0x3E9` (the same storage as interface
 
 The distinct toggle at RVA `0x3326A60` changes manager byte `+0x3E8` (interface byte `+0x100`). It requires manager pointers at `+0x348` and `+0x468`, conditionally checks `+0x478`, propagates the new mode to related systems, and invokes interface setup or teardown rather than directly fabricating a camera object. The static control flow and the dedicated `+0x28` interface slot strongly indicate that this is the native free-photo-mode route. It remains **strongly inferred**, not confirmed, until its state transition and component lifetime are observed in a running game.
 
+The guard behind interface slot `+0x40` resolves to RVA `0x3328190`. It is a broad availability test rather than a pointer-only check: it queries live gameplay services, rejects several incompatible state flags, and verifies additional controller/world conditions before permitting entry. If the guard rejects entry, the wrapper passes `false` to interface slot `+0x88` (RVA `0x3329080`). That method manages a Boolean-selected transition/feedback path; the static evidence does not justify calling it a teardown method or activation method.
+
+The native mode identity is now independently corroborated inside the runtime path. When the ordinary requested-state toggle enters, it publishes mode value `5`; the free-mode toggle also publishes mode value `5`. During setup, the selected-mode byte is compared with `5` and mapped to action-map mask `0x100000`. The same setup switch maps mode `0` to `0x20` and mode `6` to `0x04000000`. This agrees exactly with the archive-backed `FreePhoto = 5` record and confirms that mode `5` is not merely a menu label.
+
+Two ordinary consumers at RVAs `0x3332BD9` and `0x3336C18` load the published manager interface global, preserve the `+0x2E8` subobject adjustment, and invoke vtable slot `+0x98` with a Boolean value. The slot resolves to RVA `0x33299F0`; it is mode-aware and treats current mode `5` specially, but it is a downstream notification/state handler rather than the guarded free-mode entry slot. This establishes a real post-startup consumer of the published interface while keeping activation and notification separate.
+
 Manager code also publishes mode-change objects through `CPhotoCameraEventChannel`. This is downstream state notification, not sufficient evidence that publishing an event activates the camera.
 
 ## Independent schema corroboration
