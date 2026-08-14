@@ -229,12 +229,15 @@ def read_component(reader: Reader, address: int, expected_vtable: int) -> dict[s
     orientation = struct.unpack_from("<3f", raw, 0x70)
     position_xyz = struct.unpack_from("<3f", raw, 0x194)
     limits = struct.unpack_from("<2f", raw, 0x1C8)
+    accumulators = struct.unpack_from("<3f", raw, 0x1BC)
+    movement_input = struct.unpack_from("<3f", raw, 0x21C)
+    rotation_input = struct.unpack_from("<3f", raw, 0x234)
     scalars = (
         struct.unpack_from("<f", raw, 0x188)[0],
         struct.unpack_from("<f", raw, 0x18C)[0],
         struct.unpack_from("<f", raw, 0x1F4)[0],
     )
-    if not finite_vector(orientation + position_xyz + limits + scalars):
+    if not finite_vector(orientation + position_xyz + limits + accumulators + movement_input + rotation_input + scalars):
         return None
     return {
         "address": f"0x{address:X}",
@@ -242,6 +245,17 @@ def read_component(reader: Reader, address: int, expected_vtable: int) -> dict[s
             "pitch": orientation[0],
             "roll": orientation[1],
             "yaw": orientation[2],
+        },
+        "angleAccumulator": {
+            "pitch": accumulators[0],
+            "roll": accumulators[1],
+            "yaw": accumulators[2],
+        },
+        "movementInput": list(movement_input),
+        "rotationInput": {
+            "pitch": rotation_input[0],
+            "yaw": rotation_input[1],
+            "roll": rotation_input[2],
         },
         "position": list(position_xyz),
         "maxDistanceFromPlayer": scalars[0],
