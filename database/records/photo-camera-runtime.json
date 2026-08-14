@@ -210,11 +210,32 @@
     ],
     "offsets": { "argumentCount": 0, "eventObjectSize": "0x18", "dx11WrapperRva": "0x4247C90", "dx11EmitterRva": "0x4245C40", "dx11EventVtableRva": "0xA124760", "dx11ChannelGlobalRva": "0xB298D30", "dx12WrapperRva": "0x4247EE0", "dx12EmitterRva": "0x4245E90", "dx12EventVtableRva": "0xA1B37A0", "dx12ChannelGlobalRva": "0xB32DD30" },
     "threading": "Engine command/event context required; exact thread remains unresolved.",
-    "related": ["type.photo_camera_manager", "call_chain.photo_camera.manager_lifecycle", "call_chain.photo_camera.scheduler_registration_destruction", "system.camera.freecam"],
+    "related": ["event.photo_camera.request_close", "type.photo_camera_manager", "call_chain.photo_camera.manager_lifecycle", "call_chain.photo_camera.scheduler_registration_destruction", "system.camera.freecam"],
     "evidence": [
       { "type": "string_reference", "reference": "research/notes/photo-camera-close-command.md", "notes": "Generated static initialization pairs the exact command name with matching DX11/DX12 wrappers." },
       { "type": "call_site", "reference": "research/notes/photo-camera-close-command.md", "notes": "Both zero-argument wrappers call matching emitters that construct and submit a 0x18-byte owned event through build-specific channel globals." }
     ],
     "unknowns": ["Public command-registry invocation API", "Formal event payload type", "Dispatch thread", "Close acknowledgement", "Interruption behavior", "Matching open command"]
+  },
+  {
+    "id": "event.photo_camera.request_close",
+    "kind": "event",
+    "name": "RequestClosePhotoCamera event",
+    "summary": "The engine-owned close request is a clonable 0x18-byte channel event emitted by the registered command and two additional native producers in both renderer builds.",
+    "confidence": "confirmed",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "event", "close", "ownership", "channel", "lifecycle"],
+    "builds": [
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" },
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx12.dll", "moduleSha256": "E37381D67A7D7CDA377A90B05793E897A0D7321D1C568AD09C5882481AAC9EB6", "observed": "2026-08-14" }
+    ],
+    "offsets": { "objectSize": "0x18", "sharedFieldOne": "0x08", "sharedFieldTwo": "0x10", "dx11EventVtableRva": "0xA124760", "dx11ManagerProducerRva": "0x33214F0", "dx11CommandEmitterRva": "0x4245C40", "dx11UiStateProducerRva": "0x4FDE970", "dx11CloneRva": "0x34753A0", "dx11ChannelGlobalRva": "0xB298D30", "dx12EventVtableRva": "0xA1B37A0", "dx12ManagerProducerRva": "0x3321720", "dx12CommandEmitterRva": "0x4245E90", "dx12UiStateProducerRva": "0x4FDEBC0", "dx12CloneRva": "0x34755D0", "dx12ChannelGlobalRva": "0xB32DD30" },
+    "threading": "Engine channel ownership is confirmed; producer and consumer thread identities remain unresolved.",
+    "related": ["command.photo_camera.request_close", "type.photo_camera_manager", "call_chain.photo_camera.manager_lifecycle", "system.camera.freecam"],
+    "evidence": [
+      { "type": "call_site", "reference": "research/notes/photo-camera-close-event-ownership.md", "notes": "The exact event vtable has matching references from a manager-region producer, the registered command emitter, a conditional UI/state producer, and a clone routine in both renderers." },
+      { "type": "call_site", "reference": "research/notes/photo-camera-close-event-ownership.md", "notes": "The clone routines allocate 0x18 bytes, copy fields +0x08/+0x10, retain the shared object referenced by +0x10, and install the same event vtable." }
+    ],
+    "unknowns": ["Formal source-level payload type", "Consumer callback", "Dispatch thread", "Acknowledgement", "Owner class of the conditional UI/state producer", "Interruption behavior", "Matching open event or command"]
   }
 ]

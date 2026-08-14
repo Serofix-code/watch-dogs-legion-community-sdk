@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.20.0 — Photo-camera Close-event Ownership
+
+- Confirmed that the registered command and two additional native producers emit the same close-event type in both renderers.
+- Mapped matching event clone routines and shared-payload retention behavior.
+- Mapped cross-renderer manager-region and conditional UI/state producers.
+- Recorded the conditional UI/state emission fields without inventing a formal class name.
+- Retained explicit unknowns for the consumer, thread, acknowledgement, interruption behavior, and matching open request.
+
 ## v0.19.0 — Registered Photo-camera Close Command
 
 - Resolved `RequestClosePhotoCamera` from a loose string to its generated command-registration wrapper in both renderer builds.

@@ -26,6 +26,7 @@ Last updated: 2026-08-14.
 - Manager construction/destruction registration, including compact-registry insertion/removal, interface-adjusted deletion, normal teardown before helper release, and published-global clearing.
 - Cross-renderer photo-camera action registration, including its setup/update callers, helper dirty flag, selected-mode field, and renderer-specific FreePhoto identities.
 - The registered zero-argument `RequestClosePhotoCamera` command and its matching cross-renderer event-emission path.
+- The close event's cross-renderer manager, command, and conditional UI/state producers, plus its clone-and-retain ownership contract.
 - FreePhoto component pitch/roll/yaw at `+0x70/+0x74/+0x78`, fixed by reflected speed/limit fields, dedicated accumulators, initialization copies, and quaternion-to-Euler extraction.
 
 ## Strongly inferred / inferred
@@ -40,7 +41,7 @@ Last updated: 2026-08-14.
 - `CPhotoCameraManager` startup publication, guarded setup/teardown, requested-state wrapper, and distinct free-mode toggle wrapper are mapped. Interface slot `+0x28` routes through a broad availability guard and a `+0x3E8` state transition; runtime and thread requirements still need confirmation.
 - A native event callback, bounded dispatcher, mode-5 branch, and engine-owned activation caller are mapped through the guarded `+0x28` FreePhoto toggle. The symbolic action identity and safe external invocation contract remain unresolved.
 - Photo-camera action registration is owned by helper setup and dirty-flagged update; the symbolic action names, dirty-callback producer, and safe public activation contract remain unresolved.
-- `RequestClosePhotoCamera` emits an engine-owned close event, but its public registry invocation API, callback thread, acknowledgement, and any matching open command remain unresolved.
+- `RequestClosePhotoCamera` emits a clonable engine-owned close event from three native producer contexts, but its consumer callback, public registry invocation API, callback thread, acknowledgement, and any matching open command remain unresolved.
 - The component event bridge is mapped, but its two discriminator names and producer remain unresolved; neither is claimed as an open/close command.
 - The deferred request is confirmed inside the engine-owned manager update and paired update-list dispatchers; formal phase names, callback thread, registration/removal operations, and its transition into FreePhoto mode `5` remain unresolved.
 - The deferred resource's formal type and whether it owns the app, input, world capability, or another prerequisite remain unresolved.
