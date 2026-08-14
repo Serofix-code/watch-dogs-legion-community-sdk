@@ -8,6 +8,8 @@ The reflected `CPhotoCameraConfig` registration associates its factory with the 
 
 The component registers against the `CameraFreePhotoComponent` action/event name and installs scheduled callbacks. The update callback at RVA `0x323DE30` invokes the core transform routine at RVA `0x323CA60`.
 
+Manager setup does not directly call the component constructor. It creates a separate `0x160`-byte helper, configures engine services and the mode-specific action map, and dispatches the selected camera mode. The component remains engine-owned and is created through the registered component/factory path. Consequently, calling manager setup alone or fabricating a component would bypass required ownership work.
+
 Confirmed field consumers in this build include:
 
 | Component offset | Meaning | Evidence |
@@ -56,7 +58,7 @@ The application enum-to-string switch at RVA `0x3073F60` maps numeric value `16`
 
 ## Implementation status
 
-This work replaces the unsuccessful global float-calibration approach with a concrete native component and transform map. It is sufficient for targeted runtime observation, but not yet sufficient for a public trainer implementation. Required next evidence is:
+This work replaces the unsuccessful global float-calibration approach with a concrete native component and transform map. The read-only observer can optionally locate exact-vtable component candidates and refresh their mapped transform fields. It is sufficient for targeted runtime observation, but not yet sufficient for a public trainer implementation. Required next evidence is:
 
 1. observe the published manager/interface pointer and state bytes in active gameplay;
 2. observe vtable slot `+0x28`, interface byte `+0x100`, and the component lifetime during an ordinary in-game photo-mode transition;
