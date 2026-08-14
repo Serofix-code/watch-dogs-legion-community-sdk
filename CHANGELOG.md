@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.20.1 — Deferred-request RVA Correction
+
+- Corrected the DX11/DX12 deferred queue-setter RVAs to `0x3329390` and `0x33295C0`.
+- Corrected the DX11/DX12 rejection-feedback RVAs to `0x3329080` and `0x33292B0`.
+- Revalidated the corrected queue setters directly in both fingerprinted renderer modules.
+
 ## v0.20.0 — Photo-camera Close-event Ownership
 
 - Confirmed that the registered command and two additional native producers emit the same close-event type in both renderers.
