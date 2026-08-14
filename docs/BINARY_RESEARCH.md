@@ -57,7 +57,7 @@ python tools/observe_photo_camera.py --watch --json
 python tools/observe_photo_camera.py --scan-components --watch --json
 ```
 
-`--scan-components` performs one bounded scan of readable private memory for the exact fingerprinted `CCameraFreePhotoComponent` vtable. Matching objects are structurally validated and their mapped position, orientation, limits, movement speeds, and backend-handle fields are refreshed during `--watch`. The scan is opt-in because it can inspect several gigabytes; `--max-scan-mib` and `--max-components` provide explicit bounds.
+`--scan-components` performs one bounded scan of readable private memory for the exact fingerprinted `CCameraFreePhotoComponent` vtable. Matching objects are structurally validated and their mapped position, pitch/roll/yaw, angle accumulators, movement/rotation inputs, limits, movement speeds, and backend-handle fields are refreshed during `--watch`. The scan is opt-in because it can inspect several gigabytes; `--max-scan-mib` and `--max-components` provide explicit bounds.
 
 The observer refuses unknown module hashes unless `--skip-hash` is explicitly supplied. Component matches are candidates until correlated with an ordinary in-game transition. Unknown builds should be researched and recorded separately rather than assumed compatible.
 

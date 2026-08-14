@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.11.0 — FreePhoto Input Observation
+
+- Mapped the FreePhoto component's pitch/yaw/roll input fields and contiguous movement-input vector.
+- Extended the read-only observer with live angle accumulators and movement/rotation inputs for sign-convention validation.
+
 ## v0.10.1 — Orientation Mapping Correction
 
 - Corrected the v0.10.0 preliminary pitch label: component `+0x70` is pitch, `+0x74` is roll, and `+0x78` is yaw.
