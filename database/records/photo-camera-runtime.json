@@ -22,10 +22,24 @@
     "status": "under_development",
     "tags": ["camera", "photo-mode", "manager", "lifecycle"],
     "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
-    "offsets": { "startupRva": "0x321A540", "constructorRva": "0x3320530", "objectSize": "0x770", "interfaceSubobject": "0x2E8", "interfaceVtableRva": "0xA116C00", "publishedGlobalRva": "0xB486020", "setupRva": "0x3326D60", "teardownRva": "0x3327440", "stateRequestRva": "0x3329400" },
+    "offsets": { "startupRva": "0x321A540", "constructorRva": "0x3320530", "objectSize": "0x770", "interfaceSubobject": "0x2E8", "interfaceVtableRva": "0xA116C00", "publishedGlobalRva": "0xB486020", "setupRva": "0x3326D60", "teardownRva": "0x3327440", "freeModeToggleWrapperRva": "0x33293B0", "stateRequestRva": "0x3329400" },
     "related": ["type.camera_free_photo_component", "call_chain.photo_camera.manager_lifecycle", "enum.phone_app.photo_camera"],
     "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "Startup allocates 0x770 bytes, invokes the constructor, and publishes the +0x2E8 interface; vtable slots perform guarded setup and teardown." }],
-    "unknowns": ["Whether the published global is stable throughout gameplay", "Exact public activation caller", "Required thread", "Meaning of remaining vtable slots"]
+    "unknowns": ["Whether the published global is stable throughout gameplay", "Required thread", "Runtime result of the guarded free-mode wrapper", "Meaning of remaining vtable slots"]
+  },
+  {
+    "id": "call_chain.photo_camera.free_mode_toggle",
+    "kind": "call_chain",
+    "name": "Guarded free-photo-mode toggle",
+    "summary": "Interface vtable slot +0x28 guards and enters a distinct manager toggle that changes the free-mode state byte and coordinates setup or teardown through the native lifecycle.",
+    "confidence": "strongly_inferred",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "free-camera", "lifecycle", "call-chain"],
+    "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
+    "offsets": { "interfaceVtableToggleSlot": "0x28", "toggleWrapperRva": "0x33293B0", "internalToggleRva": "0x3326A60", "freeModeState": "0x100", "managerFreeModeState": "0x3E8", "prerequisitePointer": "0x468", "optionalControlPointer": "0x478" },
+    "related": ["type.photo_camera_manager", "call_chain.photo_camera.manager_lifecycle", "type.camera_free_photo_component", "system.camera.freecam"],
+    "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "The +0x28 vtable entry resolves to a guard wrapper; its allowed branch adjusts interface-to-manager ownership and tail-calls the distinct +0x3E8 toggle, which routes through setup/teardown and publishes related state." }],
+    "unknowns": ["Required game thread", "Exact guard semantics", "Runtime component pointer", "Interruption and save/load behavior", "Whether external invocation is safe"]
   },
   {
     "id": "call_chain.photo_camera.manager_lifecycle",

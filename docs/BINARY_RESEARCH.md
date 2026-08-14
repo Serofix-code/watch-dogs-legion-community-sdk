@@ -17,12 +17,16 @@ Optional `--range-start` and `--range-length` values accept decimal or `0x` nota
 
 ## Bounded PE cross-reference and disassembly tools
 
-The repository also includes `find_string_xrefs.py`, `find_rip_xrefs.py`, `show_binary_range.py`, and `disassemble_range.py`. These are local, read-only helpers; they do not copy the inspected binary or create bulk dumps. The PE-aware tools require `pefile` and `capstone`; the optimized RIP-relative scanner additionally requires `numpy`.
+The repository also includes bounded helpers for strings, RIP-relative references, direct calls, vtable calls, encoded pointers, PE ranges, and disassembly. These are local and read-only; they do not copy the inspected binary or create bulk dumps. The PE-aware tools require `pefile` and `capstone`; the optimized RIP-relative scanner additionally requires `numpy`.
 
 ```bash
 python -m pip install pefile capstone numpy
 python tools/find_string_xrefs.py path/to/module.dll PhotoCameraConfig
 python tools/find_rip_xrefs.py path/to/module.dll rva:0x9E9ECE8 --max-results 20
+python tools/find_relative_calls.py path/to/module.dll 0x1833293B0 --max-results 20
+python tools/find_vtable_calls.py path/to/module.dll 0x28 --rva-start 0x3200000 --rva-end 0x3400000
+python tools/find_absolute_pointers.py path/to/module.dll 0x1833293B0 --include-rva32
+python tools/show_binary_range.py path/to/module.dll 0x18A116C00 0x40 --pe-address
 python tools/disassemble_range.py path/to/module.dll 0x18323CA60 0x280
 ```
 
@@ -30,7 +34,7 @@ Keep published output tightly bounded to the evidence necessary for an independe
 
 ## Read-only photo-camera runtime observation
 
-`observe_photo_camera.py` opens the game with query/read access only and validates the mapped manager interface against the exact supported module hash and vtable. It reports requested state, active state, and helper lifetime without allocating, injecting, hooking, suspending, changing protection, or writing.
+`observe_photo_camera.py` opens the game with query/read access only and validates the mapped manager interface against the exact supported module hash and vtable. It reports the distinct free-mode state, ordinary requested state, active state, and helper lifetime without allocating, injecting, hooking, suspending, changing protection, or writing.
 
 ```powershell
 python tools/observe_photo_camera.py

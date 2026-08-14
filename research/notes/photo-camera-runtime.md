@@ -27,15 +27,22 @@ The position layout is confirmed as a contiguous three-float vector. The three o
 
 Startup code at RVA `0x321A540` allocates a `0x770`-byte manager and calls constructor RVA `0x3320530`. It publishes the interface subobject at `object + 0x2E8` through a build-specific global at RVA `0xB486020`. That address must not be treated as a stable public pointer until its lifetime is observed at runtime.
 
-The interface vtable at RVA `0xA116C00` contains a paired setup/teardown path and a normal state-request wrapper:
+The interface vtable at RVA `0xA116C00` contains a paired setup/teardown path, a guarded free-mode toggle, and a normal camera-state request wrapper:
 
 - slot `+0x08`, RVA `0x3326D60`, validates manager fields `+0x60` and `+0x180`, creates a `0x160`-byte helper at interface offset `+0x318`, installs camera/controller resources and an action map, then sets active byte `+0x102`;
 - slot `+0x10`, RVA `0x3327440`, requires those same prerequisites and active state, releases the helper and registered resources, then clears `+0x102`;
+- slot `+0x28`, RVA `0x33293B0`, is a no-argument guarded toggle. It permits shutdown when interface byte `+0x100` is already set; otherwise it consults virtual guard slot `+0x40`. The allowed branch adjusts from the interface subobject to the manager base and tail-calls RVA `0x3326A60`;
 - slot `+0x30`, RVA `0x3329400`, accepts a Boolean requested state, compares it with byte `+0x101`, adjusts from the interface subobject to the manager base, and tail-calls the internal toggle at RVA `0x3326870` only when a change is needed.
 
 The internal toggle changes manager byte `+0x3E9` (the same storage as interface byte `+0x101`), updates related gameplay/UI state, and calls the virtual setup or teardown method. This establishes slot `+0x30` as the closest mapped route to the engine's own requested-state lifecycle. It is preferable to calling setup directly, but its public acquisition and thread contract are still not runtime-confirmed.
 
+The distinct toggle at RVA `0x3326A60` changes manager byte `+0x3E8` (interface byte `+0x100`). It requires manager pointers at `+0x348` and `+0x468`, conditionally checks `+0x478`, propagates the new mode to related systems, and invokes interface setup or teardown rather than directly fabricating a camera object. The static control flow and the dedicated `+0x28` interface slot strongly indicate that this is the native free-photo-mode route. It remains **strongly inferred**, not confirmed, until its state transition and component lifetime are observed in a running game.
+
 Manager code also publishes mode-change objects through `CPhotoCameraEventChannel`. This is downstream state notification, not sufficient evidence that publishing an event activates the camera.
+
+## Independent schema corroboration
+
+The zlib-licensed [Gibbed Disrupt tools](https://github.com/gibbed/Gibbed.Disrupt/tree/8c41fe50fabf2eb5673919ef6b5fff1c09186381) document WDL's FAT5 archive format and name hashing in source. A separate WDL definition set pins `FreeModeCamera` inside `PhotoCameraConfig` with enter, exit, movement-start, and movement-end fields ([schema at commit `1d3c3b4`](https://github.com/qstlijku/Gibbed-Tools/blob/1d3c3b447d977d2220b0a6948805766b31e84bcf/projects/WDL/binary%20objects/classes/Photocameraconfig_40469731.binaryclass.xml)). This corroborates the subsection classification but does not by itself prove the runtime activation contract.
 
 ## Higher-level entry clue
 
@@ -46,6 +53,6 @@ The application enum-to-string switch at RVA `0x3073F60` maps numeric value `16`
 This work replaces the unsuccessful global float-calibration approach with a concrete native component and transform map. It is sufficient for targeted runtime observation, but not yet sufficient for a public trainer implementation. Required next evidence is:
 
 1. observe the published manager/interface pointer and state bytes in active gameplay;
-2. validate vtable slot `+0x30` on the game's existing update thread rather than a newly created thread;
+2. observe vtable slot `+0x28`, interface byte `+0x100`, and the component lifetime during an ordinary in-game photo-mode transition;
 3. confirm orientation axis order and position changes while photo mode is active;
 4. confirm teardown after interruption and save/load transitions.
