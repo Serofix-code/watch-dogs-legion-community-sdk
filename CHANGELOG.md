@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.4.0 — Photo-camera Runtime Mapping
+
+- Corrected `FreeModeCamera` from an inferred enum value to a reflected configuration subsection.
+- Mapped `CPhotoCameraConfig` construction, factory, size, vtable, and component registration.
+- Mapped `CCameraFreePhotoComponent`, including position, orientation, movement-speed, pitch-limit, backend-handle, and update fields.
+- Mapped the `CPhotoCameraManager` allocation/publication path and strongly inferred paired setup/teardown methods.
+- Confirmed phone/application enum value `16` maps to `PhotoCamera`.
+- Added bounded disassembly and RIP-relative cross-reference research tools.
+- Kept trainer integration under development pending runtime lifecycle validation.
+
 ## v0.3.0 — DLL Registration Research
 
 - Added the first exact module fingerprint and embedded build identity.

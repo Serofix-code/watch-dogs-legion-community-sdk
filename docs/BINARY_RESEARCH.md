@@ -15,6 +15,19 @@ python tools/inspect_binary_strings.py path/to/module.dll \
 
 Optional `--range-start` and `--range-length` values accept decimal or `0x` notation and allow a known PE region to be inspected without scanning the entire file.
 
+## Bounded PE cross-reference and disassembly tools
+
+The repository also includes `find_string_xrefs.py`, `find_rip_xrefs.py`, `show_binary_range.py`, and `disassemble_range.py`. These are local, read-only helpers; they do not copy the inspected binary or create bulk dumps. The PE-aware tools require `pefile` and `capstone`; the optimized RIP-relative scanner additionally requires `numpy`.
+
+```bash
+python -m pip install pefile capstone numpy
+python tools/find_string_xrefs.py path/to/module.dll PhotoCameraConfig
+python tools/find_rip_xrefs.py path/to/module.dll rva:0x9E9ECE8 --max-results 20
+python tools/disassemble_range.py path/to/module.dll 0x18323CA60 0x280
+```
+
+Keep published output tightly bounded to the evidence necessary for an independently written interoperability record.
+
 ## Evidence rules
 
 - Record the exact module digest and build identity.

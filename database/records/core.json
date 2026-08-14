@@ -45,14 +45,18 @@
     "id": "system.camera.freecam",
     "kind": "system",
     "name": "True freecam camera control",
-    "summary": "Movable standalone freecam transform and safe write path have not yet been identified.",
-    "confidence": "unknown",
+    "summary": "The built-in free-photo-camera component, transform fields, update path, and manager lifecycle have been mapped statically; safe activation still requires runtime validation.",
+    "confidence": "strongly_inferred",
     "status": "under_development",
     "tags": ["camera", "freecam", "research"],
     "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14", "notes": "Automatic differential scanning completed but selected a false positive." }],
     "signature": null,
-    "related": [],
-    "evidence": [{ "type": "negative_result", "reference": "research/notes/camera-2026-08-14.md", "notes": "One-scalar intersection across both axes selected a tiny continuously oscillating value rather than a direction-correlated transform." }],
-    "unknowns": ["Camera object address", "Position and rotation layout", "Writer call site", "Thread requirement", "Safe reset behavior"]
+    "offsets": { "componentPosition": "0x194", "componentOrientation": "0x70", "backendHandle": "0x280", "internalTransform": "0x290" },
+    "related": ["type.camera_free_photo_component", "type.photo_camera_manager", "type.photo_camera_config"],
+    "evidence": [
+      { "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "The native component copies +0x194/+0x198/+0x19C into its internal transform and builds rotation from +0x70/+0x74/+0x78 before updating the backend camera." },
+      { "type": "negative_result", "reference": "research/notes/camera-2026-08-14.md", "notes": "The earlier one-scalar differential scan selected a continuously oscillating false positive and is retained as a negative result." }
+    ],
+    "unknowns": ["Safe public activation caller", "Thread and gameplay-state requirements", "Axis order", "Reset behavior after interrupted teardown", "Runtime validation of manager slots"]
   }
 ]

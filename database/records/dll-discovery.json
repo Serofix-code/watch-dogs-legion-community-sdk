@@ -212,27 +212,27 @@
     "kind": "type",
     "name": "PhotoCameraConfig",
     "summary": "Reflected configuration type containing photo-mode input, availability, camera-lens, sensor, selfie, menu, and reset settings.",
-    "confidence": "strongly_inferred",
+    "confidence": "confirmed",
     "status": "under_development",
     "tags": ["camera", "photo-mode", "reflection", "config"],
     "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
-    "offsets": { "nameFileOffset": "0x9E9E0E8", "nameRva": "0x9E9ECE8" },
-    "related": ["enum.photo_camera_mode.free_mode_camera", "system.camera.freecam"],
-    "evidence": [{ "type": "string_reference", "reference": "research/notes/photo-camera-config.md", "notes": "A dense reflected-field cluster follows PhotoCameraConfig and includes camera modes, input events, reset actions, lens/sensor configs, availability timers, and menu metadata." }],
-    "unknowns": ["Type descriptor address", "Object instance location", "Field offsets", "Runtime controller type", "Safe activation path"]
+    "offsets": { "nameFileOffset": "0x9E9E0E8", "nameRva": "0x9E9ECE8", "constructorRva": "0xE7E5B0", "destructorRva": "0xE7EFF0", "factoryRva": "0x327EC20", "objectSize": "0x320", "vtableRva": "0x9E9F400" },
+    "related": ["config.photo_camera.free_mode_section", "type.camera_free_photo_component", "system.camera.freecam"],
+    "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-config.md", "notes": "The reflected factory allocates exactly 0x320 bytes, invokes the constructor, and registration associates the config with CCameraFreePhotoComponent." }],
+    "unknowns": ["Live configuration instance location", "Complete field-offset map", "Safe public activation path"]
   },
   {
-    "id": "enum.photo_camera_mode.free_mode_camera",
-    "kind": "enum",
+    "id": "config.photo_camera.free_mode_section",
+    "kind": "system",
     "name": "FreeModeCamera",
-    "summary": "Discovered photo-camera mode value with movement-start and movement-end actions.",
-    "confidence": "inferred",
+    "summary": "Reflected PhotoCameraConfig subsection containing free-camera enter and movement-start/end sound and action fields; it is not an enum value.",
+    "confidence": "strongly_inferred",
     "status": "under_development",
-    "tags": ["camera", "photo-mode", "free-camera", "enum"],
+    "tags": ["camera", "photo-mode", "free-camera", "config"],
     "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
     "offsets": { "nameFileOffset": "0x9E9E2A8", "nameRva": "0x9E9EEA8" },
     "related": ["type.photo_camera_config", "system.camera.freecam"],
-    "evidence": [{ "type": "string_reference", "reference": "research/notes/photo-camera-config.md", "notes": "FreeModeCamera appears after ToggleValue and before Enter, MovementStart, and MovementEnd action/sound fields." }],
-    "unknowns": ["Numeric enum value", "Activation function", "Camera ownership", "Whether it can operate outside built-in photo mode"]
+    "evidence": [{ "type": "cross_reference", "reference": "research/notes/photo-camera-config.md", "notes": "String ordering and reflected registration place FreeModeCamera as a subsection heading before sndEnter, sndMovementStart, sndMovementEnd, MovementStart, and MovementEnd." }],
+    "unknowns": ["Complete subsection layout", "Whether free movement can operate outside built-in photo mode"]
   }
 ]
