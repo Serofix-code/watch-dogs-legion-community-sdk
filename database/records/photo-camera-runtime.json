@@ -110,5 +110,22 @@
     "related": ["type.photo_camera_manager", "type.photo_camera_manager_runtime_helper", "call_chain.photo_camera.native_free_mode_activation", "call_chain.photo_camera.manager_lifecycle"],
     "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-component-bridge.md", "notes": "The handler is present in the CPhotoCameraComponent table, compares the incoming 32-bit discriminator against two independently initialized values, loads the corrected published manager global, and tail-dispatches to slots +0x98 or +0xA0." }],
     "unknowns": ["Symbolic names of both discriminators", "Producer of the incoming event", "Required callback thread", "Whether either branch is an app-level open or close request", "Runtime ordering relative to FreePhoto activation"]
+  },
+  {
+    "id": "call_chain.photo_camera.deferred_request",
+    "kind": "call_chain",
+    "name": "Deferred photo-camera request lifecycle",
+    "summary": "A guarded higher-level requester queues photo-camera work through manager slot +0x20; a later manager update validates live services, handles the selected branch, and clears the pending flag.",
+    "confidence": "confirmed",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "manager", "deferred", "game-thread", "lifecycle", "call-chain"],
+    "builds": [
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" },
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx12.dll", "moduleSha256": "E37381D67A7D7CDA377A90B05793E897A0D7321D1C568AD09C5882481AAC9EB6", "observed": "2026-08-14" }
+    ],
+    "offsets": { "interfaceQueueSlot": "0x20", "interfaceRequestSelector": "0x330", "interfaceRequestState": "0x331", "interfacePendingFlag": "0x333", "managerRequestSelector": "0x618", "managerRequestState": "0x619", "managerPendingFlag": "0x61B", "dx11GuardedRequesterRva": "0x308FC70", "dx11QueueSetterRva": "0x329390", "dx11DeferredConsumerEntryRva": "0x324370", "dx11FailureFeedbackRva": "0x329080", "dx12GuardedRequesterRva": "0x308FEA0", "dx12QueueSetterRva": "0x3295C0", "dx12DeferredConsumerEntryRva": "0x3245A0", "dx12FailureFeedbackRva": "0x3292B0" },
+    "related": ["type.photo_camera_manager", "call_chain.photo_camera.manager_lifecycle", "call_chain.photo_camera.component_manager_bridge", "call_chain.photo_camera.native_free_mode_activation", "system.camera.freecam.dx12_cl2073645"],
+    "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-deferred-request.md", "notes": "Both fingerprinted renderers contain the same guarded requester, +0x20 queue setter, manager-relative pending/selector fields, live-service validation branches, and pending-flag clear in the deferred consumer." }],
+    "unknowns": ["Formal scheduler and callback-thread identity", "Symbolic name of the guarded requester", "Exact meaning of selector/state bytes", "How the deferred normal request transitions into FreePhoto mode 5", "Runtime interruption and cancellation behavior"]
   }
 ]

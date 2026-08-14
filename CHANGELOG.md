@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.14.0 — Deferred Photo Request Lifecycle
+
+- Mapped the guarded higher-level photo-camera requester in DX11 and DX12.
+- Identified manager interface slot `+0x20` as a deferred queue setter rather than immediate activation.
+- Mapped request selector/state/pending bytes in interface and outer-manager coordinates.
+- Traced the later consumer's live-service checks, branch selection, and pending-flag clear.
+- Documented why direct setup or FreePhoto-toggle calls bypass an engine-owned safety boundary.
+
 ## v0.13.0 — Photo-camera Component Bridge
 
 - Mapped the `CPhotoCameraComponent` constructor, vtable regions, and manager-facing event handler.
