@@ -127,5 +127,22 @@
     "related": ["type.photo_camera_manager", "call_chain.photo_camera.manager_lifecycle", "call_chain.photo_camera.component_manager_bridge", "call_chain.photo_camera.native_free_mode_activation", "system.camera.freecam.dx12_cl2073645"],
     "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-deferred-request.md", "notes": "Both fingerprinted renderers contain the same guarded requester, +0x20 queue setter, manager-relative pending/selector fields, live-service validation branches, and pending-flag clear in the deferred consumer." }],
     "unknowns": ["Formal scheduler and callback-thread identity", "Symbolic name of the guarded requester", "Exact meaning of selector/state bytes", "How the deferred normal request transitions into FreePhoto mode 5", "Runtime interruption and cancellation behavior"]
+  },
+  {
+    "id": "call_chain.photo_camera.deferred_resource_ownership",
+    "kind": "call_chain",
+    "name": "Deferred photo-request resource ownership",
+    "summary": "The deferred request's selected branches invoke a paired engine resource acquire/release object that tracks active state and an owned handle, calls virtual lifecycle hooks, and invalidates the handle on release.",
+    "confidence": "confirmed",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "deferred", "ownership", "resource", "lifecycle", "call-chain"],
+    "builds": [
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" },
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx12.dll", "moduleSha256": "E37381D67A7D7CDA377A90B05793E897A0D7321D1C568AD09C5882481AAC9EB6", "observed": "2026-08-14" }
+    ],
+    "offsets": { "activeState": "0xF0", "ownedHandle": "0xF8", "sourceHandle": "0x100", "prepareVirtualSlot": "0x370", "acquireVirtualSlot": "0x378", "releaseVirtualSlot": "0x380", "dx11AcquireRva": "0x244DB80", "dx11ReleaseRva": "0x244DBF0", "dx11AcquireCallSiteRva": "0x3244F5", "dx11ReleaseCallSiteRva": "0x324571", "dx12AcquireRva": "0x244DDA0", "dx12ReleaseRva": "0x244DE10", "dx12AcquireCallSiteRva": "0x324725", "dx12ReleaseCallSiteRva": "0x3247A1", "invalidHandle": "0xFFFFFFFFFFFFFFFF" },
+    "related": ["call_chain.photo_camera.deferred_request", "type.photo_camera_manager", "call_chain.photo_camera.manager_lifecycle"],
+    "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-deferred-resource.md", "notes": "Both deferred consumers call renderer-specific copies of the same paired acquire/release implementation. Acquire sets active state, copies the source handle, and invokes +0x370/+0x378; release clears active state, optionally invokes +0x380, and writes the invalid handle sentinel." }],
+    "unknowns": ["Formal type name of the resource owner", "Meaning of the acquired handle", "Whether the resource owns the app, input context, world capability, or another prerequisite", "Thread affinity", "Interruption behavior"]
   }
 ]

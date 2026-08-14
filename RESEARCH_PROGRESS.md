@@ -21,6 +21,7 @@ Last updated: 2026-08-14.
 - The engine-owned `0x160`-byte runtime helper, its event-subscription owner edge, three transition tokens, selected-mode field, and ordered cleanup path.
 - The `CPhotoCameraComponent` event bridge to manager slots `+0x98/+0xA0`, including both opaque discriminator values and the helper-state reset at helper `+0x1C`.
 - The cross-renderer deferred photo request: a guarded requester queues through manager slot `+0x20`, and a later update validates live services before clearing the pending request.
+- The deferred request's paired resource owner, including active/source/owned-handle fields and virtual acquire/release hooks in both renderers.
 - FreePhoto component pitch/roll/yaw at `+0x70/+0x74/+0x78`, fixed by reflected speed/limit fields, dedicated accumulators, initialization copies, and quaternion-to-Euler extraction.
 
 ## Strongly inferred / inferred
@@ -36,6 +37,7 @@ Last updated: 2026-08-14.
 - A native event callback, bounded dispatcher, mode-5 branch, and engine-owned activation caller are mapped through the guarded `+0x28` FreePhoto toggle. The symbolic action identity and safe external invocation contract remain unresolved.
 - The component event bridge is mapped, but its two discriminator names and producer remain unresolved; neither is claimed as an open/close command.
 - The safe scheduler/callback contract for the deferred request and its transition from ordinary photo mode into FreePhoto mode `5` remain unresolved.
+- The deferred resource's formal type and whether it owns the app, input, world capability, or another prerequisite remain unresolved.
 
 ## Unknown / unresolved
 
