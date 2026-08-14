@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.16.0 — Photo-camera Update Scheduler
+
+- Corrected four deferred-consumer/call-site RVAs that were missing one hexadecimal digit in v0.14.0 and v0.15.0 documentation.
+- Mapped the cross-renderer `CPhotoCameraManager` main update and its direct deferred-consumer call.
+- Mapped the two engine-owned update-list dispatchers that invoke the manager update.
+- Documented dispatcher active-state and compact-list fields while retaining unknown phase/thread names.
+
 ## v0.15.0 — Deferred Resource Ownership
 
 - Traced the deferred request's paired resource acquire/release calls in DX11 and DX12.
