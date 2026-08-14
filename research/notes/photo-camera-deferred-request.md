@@ -13,7 +13,7 @@ The exact caller class and symbolic operation name remain unresolved. The struct
 
 ## Queue setter
 
-Manager interface slot `+0x20` resolves to DX11 RVA `0x329390` and DX12 RVA `0x3295C0`. It performs no allocation and does not enter photo mode immediately. Instead, it writes `0x0101` to interface bytes `+0x330/+0x331` and sets interface byte `+0x333` to `1`.
+Manager interface slot `+0x20` resolves to DX11 RVA `0x3329390` and DX12 RVA `0x33295C0`. It performs no allocation and does not enter photo mode immediately. Instead, it writes `0x0101` to interface bytes `+0x330/+0x331` and sets interface byte `+0x333` to `1`.
 
 Because the interface subobject begins at outer-manager `+0x2E8`, these fields correspond to manager bytes `+0x618/+0x619/+0x61B`.
 
