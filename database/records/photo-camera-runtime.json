@@ -160,6 +160,23 @@
     "offsets": { "dx11ManagerUpdateRva": "0x331FA70", "dx11DeferredConsumerCallSiteRva": "0x331FB9F", "dx11DeferredConsumerRva": "0x3324370", "dx11ListDispatcherOneRva": "0x348F2B0", "dx11ListDispatcherTwoRva": "0x348F330", "dx12ManagerUpdateRva": "0x331FCA0", "dx12DeferredConsumerCallSiteRva": "0x331FDCF", "dx12DeferredConsumerRva": "0x33245A0", "dx12ListDispatcherOneRva": "0x348F4E0", "dx12ListDispatcherTwoRva": "0x348F560", "dispatcherBusyFlag": "0x8", "dispatcherListOneDescriptor": "0x18", "dispatcherListOneStorage": "0x20", "dispatcherListTwoDescriptor": "0x28", "dispatcherListTwoStorage": "0x30" },
     "related": ["call_chain.photo_camera.deferred_request", "call_chain.photo_camera.deferred_resource_ownership", "type.photo_camera_manager", "call_chain.photo_camera.manager_lifecycle"],
     "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-update-scheduler.md", "notes": "Both renderer builds have matching manager-update functions, direct deferred-consumer call sites, and paired list dispatchers that enumerate manager pointers while an in-dispatch byte is set." }],
-    "unknowns": ["Formal scheduler and update-phase type names", "Which dispatcher list corresponds to which update phase", "Thread identity", "Manager registration and removal functions", "Cancellation behavior during world teardown"]
+    "unknowns": ["Formal scheduler and update-phase type names", "Which dispatcher list corresponds to which update phase", "Thread identity", "Cancellation behavior during world teardown"]
+  },
+  {
+    "id": "call_chain.photo_camera.scheduler_registration_destruction",
+    "kind": "call_chain",
+    "name": "Photo-camera scheduler registration and destruction",
+    "summary": "Manager construction registers the outer object in an engine-owned compact registry; destruction enters through the published interface, runs normal manager teardown, releases owned helper state, removes the outer object from the registry, and clears the published interface global.",
+    "confidence": "confirmed",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "scheduler", "registration", "destructor", "teardown", "ownership", "call-chain"],
+    "builds": [
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" },
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx12.dll", "moduleSha256": "E37381D67A7D7CDA377A90B05793E897A0D7321D1C568AD09C5882481AAC9EB6", "observed": "2026-08-14" }
+    ],
+    "offsets": { "outerManagerSize": "0x770", "interfaceSubobject": "0x2E8", "runtimeHelper": "0x600", "registryDescriptor": "0x60", "registryStorage": "0x68", "dx11ManagerConstructorRva": "0x3320530", "dx11BaseRegistrationConstructorRva": "0x64FCD30", "dx11RegistryGlobalRva": "0xB478AB8", "dx11InterfaceDeleteThunkRva": "0x346B480", "dx11OuterDestructorRva": "0x3321BE0", "dx11NormalTeardownCallSiteRva": "0x3321E2B", "dx11HelperReleaseSiteRva": "0x3322137", "dx11BaseRegistryDestructorRva": "0x64FCFF0", "dx11PublishedGlobalClearRva": "0x332221F", "dx12ManagerConstructorRva": "0x3320760", "dx12BaseRegistrationConstructorRva": "0x64FE130", "dx12RegistryGlobalRva": "0xB50DAF8", "dx12InterfaceDeleteThunkRva": "0x346B6B0", "dx12OuterDestructorRva": "0x3321E10", "dx12NormalTeardownCallSiteRva": "0x332205B", "dx12HelperReleaseSiteRva": "0x3322367", "dx12BaseRegistryDestructorRva": "0x64FE3F0", "dx12PublishedGlobalClearRva": "0x332244F" },
+    "related": ["call_chain.photo_camera.update_scheduler", "call_chain.photo_camera.manager_lifecycle", "call_chain.photo_camera.deferred_resource_ownership", "type.photo_camera_manager"],
+    "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-registration-destruction.md", "notes": "Matching constructor/base-constructor and interface-delete/outer-destructor paths in both renderers insert and remove the manager from the same compact registry and preserve teardown-before-helper-release ordering." }],
+    "unknowns": ["Formal registry type name", "How registry entries are transferred into the two update-phase lists", "Thread identity", "Behavior when destruction races an in-progress dispatcher", "Whether deferred resource release is guaranteed before world service destruction"]
   }
 ]

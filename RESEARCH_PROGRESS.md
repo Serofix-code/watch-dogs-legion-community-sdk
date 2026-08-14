@@ -23,6 +23,7 @@ Last updated: 2026-08-14.
 - The cross-renderer deferred photo request: a guarded requester queues through manager slot `+0x20`, and a later update validates live services before clearing the pending request.
 - The deferred request's paired resource owner, including active/source/owned-handle fields and virtual acquire/release hooks in both renderers.
 - The engine-owned manager update and paired list dispatchers that schedule the deferred consumer in both renderers.
+- Manager construction/destruction registration, including compact-registry insertion/removal, interface-adjusted deletion, normal teardown before helper release, and published-global clearing.
 - FreePhoto component pitch/roll/yaw at `+0x70/+0x74/+0x78`, fixed by reflected speed/limit fields, dedicated accumulators, initialization copies, and quaternion-to-Euler extraction.
 
 ## Strongly inferred / inferred
@@ -39,6 +40,7 @@ Last updated: 2026-08-14.
 - The component event bridge is mapped, but its two discriminator names and producer remain unresolved; neither is claimed as an open/close command.
 - The deferred request is confirmed inside the engine-owned manager update and paired update-list dispatchers; formal phase names, callback thread, registration/removal operations, and its transition into FreePhoto mode `5` remain unresolved.
 - The deferred resource's formal type and whether it owns the app, input, world capability, or another prerequisite remain unresolved.
+- The formal scheduler registry type, transfer into the two phase lists, and destruction synchronization with an in-progress dispatcher remain unresolved.
 
 ## Unknown / unresolved
 
