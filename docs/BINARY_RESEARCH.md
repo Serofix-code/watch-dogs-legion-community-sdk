@@ -28,6 +28,17 @@ python tools/disassemble_range.py path/to/module.dll 0x18323CA60 0x280
 
 Keep published output tightly bounded to the evidence necessary for an independently written interoperability record.
 
+## Read-only photo-camera runtime observation
+
+`observe_photo_camera.py` opens the game with query/read access only and validates the mapped manager interface against the exact supported module hash and vtable. It reports requested state, active state, and helper lifetime without allocating, injecting, hooking, suspending, changing protection, or writing.
+
+```powershell
+python tools/observe_photo_camera.py
+python tools/observe_photo_camera.py --watch --json
+```
+
+The observer refuses unknown module hashes unless `--skip-hash` is explicitly supplied. Unknown builds should be researched and recorded separately rather than assumed compatible.
+
 ## Evidence rules
 
 - Record the exact module digest and build identity.
