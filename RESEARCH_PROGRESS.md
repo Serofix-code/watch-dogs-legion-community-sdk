@@ -7,6 +7,18 @@ Last updated: 2026-08-14.
 - Guarded operative-manager capture signature behavior.
 - Operative roster count, pointer array, and operative ID traversal.
 - Census-backed first-name and surname localization resolution.
+- Engine-thread Lua command handoff and visible entity spawning/removal.
+- Reticle-hit coordinates and active-player/world coordinate capture.
+- Map-waypoint coordinate capture.
+- Biography event, age, income, and NPC status layouts with immediate readback.
+
+## Strongly inferred / inferred
+
+- The packed 24-byte operative appearance record uses version 12/type 2 and big-endian bitfields; complete visual persistence is not verified.
+- The perk container is a small-vector-style array with two inline 32-bit IDs; safe external allocation is unresolved.
+- Contract and attendance traversal resolves participants and time ranges, but ownership and AI scheduling consequences remain unknown.
+- `ExecuteReward_V2` accepts readable ItemDB names, but queue consumption does not prove reward ownership.
+- `TriggerRuleSmithRule` accepts candidate numeric rules, but independent progression readback is still required.
 
 ## Unknown / unresolved
 
@@ -15,6 +27,8 @@ Last updated: 2026-08-14.
 - Raw save codec, integrity rules, and safe cross-save operative transfer.
 - Complete Lua binding, event dispatch, UI factory, command, type, and reflection registries.
 - Exact module hashes and per-build signature matrix.
+- Complete entity ownership and lifetime rules for Lua-spawned objects.
+- Reward result/persistence acknowledgement separate from game-thread handoff.
 
 ## Camera result
 
