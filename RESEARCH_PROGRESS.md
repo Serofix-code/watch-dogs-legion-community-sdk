@@ -17,6 +17,8 @@ Last updated: 2026-08-14.
 - Phone/application enum value `16` maps to `PhotoCamera` in the observed build.
 - The fingerprinted archive config maps photo-camera modes Normal `0`, Selfie `1`, FreePhoto `5`, and PhotoBooth `6`; FreePhoto FOV is configured from `45` to `90`.
 - The native free-mode and requested-state paths publish mode `5`, and setup maps mode `5` to the dedicated `0x100000` action-map mask.
+- The engine-owned `0x160`-byte runtime helper, its event-subscription owner edge, three transition tokens, selected-mode field, and ordered cleanup path.
+- FreePhoto component pitch at `+0x74`, derived from quaternion-to-Euler extraction and configured pitch clamping.
 
 ## Strongly inferred / inferred
 
@@ -29,11 +31,10 @@ Last updated: 2026-08-14.
 - `FreeModeCamera` is a reflected `PhotoCameraConfig` subsection, not an enum value.
 - `CPhotoCameraManager` startup publication, guarded setup/teardown, requested-state wrapper, and distinct free-mode toggle wrapper are mapped. Interface slot `+0x28` routes through a broad availability guard and a `+0x3E8` state transition; runtime and thread requirements still need confirmation.
 - A native event callback, bounded dispatcher, mode-5 branch, and engine-owned activation caller are mapped through the guarded `+0x28` FreePhoto toggle. The symbolic action identity and safe external invocation contract remain unresolved.
-- The engine-owned `0x160`-byte runtime helper is mapped from construction through input/event subscription and transition-token cleanup; the read-only observer can validate these fields during a future live session.
 
 ## Unknown / unresolved
 
-- Runtime result of the native activation chain and guarded free-mode wrapper, game-thread contract, orientation axis order, and interruption/reset behavior.
+- Runtime result of the native activation chain and guarded free-mode wrapper, game-thread contract, semantic names for orientation axes `+0x70`/`+0x78`, and interruption/reset behavior. Pitch is confirmed at `+0x74`.
 - Names and semantics for photo-camera mode values `2`, `3`, and `4`.
 - Recruitment insertion and ownership semantics.
 - Raw save codec, integrity rules, and safe cross-save operative transfer.

@@ -51,12 +51,12 @@
     "tags": ["camera", "freecam", "research"],
     "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14", "notes": "Automatic differential scanning completed but selected a false positive." }],
     "signature": null,
-    "offsets": { "componentPosition": "0x194", "componentOrientation": "0x70", "backendHandle": "0x280", "internalTransform": "0x290" },
-    "related": ["type.camera_free_photo_component", "type.photo_camera_manager", "type.photo_camera_config"],
+    "offsets": { "componentPosition": "0x194", "componentOrientationAxis0": "0x70", "componentPitch": "0x74", "componentOrientationAxis2": "0x78", "backendHandle": "0x280", "internalTransform": "0x290" },
+    "related": ["type.camera_free_photo_component", "type.photo_camera_manager", "type.photo_camera_manager_runtime_helper", "type.photo_camera_config", "call_chain.photo_camera.native_free_mode_activation"],
     "evidence": [
       { "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "The native component copies +0x194/+0x198/+0x19C into its internal transform and builds rotation from +0x70/+0x74/+0x78 before updating the backend camera." },
       { "type": "negative_result", "reference": "research/notes/camera-2026-08-14.md", "notes": "The earlier one-scalar differential scan selected a continuously oscillating false positive and is retained as a negative result." }
     ],
-    "unknowns": ["Safe public activation caller", "Thread and gameplay-state requirements", "Axis order", "Reset behavior after interrupted teardown", "Runtime validation of manager slots"]
+    "unknowns": ["Safe external invocation contract", "Thread and gameplay-state requirements", "Semantic names for orientation axes +0x70 and +0x78", "Reset behavior after interrupted teardown", "Runtime validation of manager slots and component lifetime"]
   }
 ]

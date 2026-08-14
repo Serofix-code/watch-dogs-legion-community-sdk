@@ -8,10 +8,10 @@
     "status": "under_development",
     "tags": ["camera", "photo-mode", "free-camera", "component"],
     "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
-    "offsets": { "factoryRva": "0x32390F0", "constructorRva": "0x323A110", "destructorRva": "0x323A370", "vtableRva": "0xA0FC380", "objectSize": "0x410", "orientation": "0x70", "maxDistanceFromPlayer": "0x188", "cameraMoveSpeed": "0x18C", "position": "0x194", "minimumPitch": "0x1C8", "maximumPitch": "0x1CC", "orbitMovementSpeed": "0x1F4", "backendHandle": "0x280", "internalTransform": "0x290", "updateCallbackRva": "0x323DE30", "transformUpdateRva": "0x323CA60" },
+    "offsets": { "factoryRva": "0x32390F0", "constructorRva": "0x323A110", "destructorRva": "0x323A370", "vtableRva": "0xA0FC380", "objectSize": "0x410", "orientationAxis0": "0x70", "pitch": "0x74", "orientationAxis2": "0x78", "maxDistanceFromPlayer": "0x188", "cameraMoveSpeed": "0x18C", "position": "0x194", "minimumPitch": "0x1C8", "maximumPitch": "0x1CC", "orbitMovementSpeed": "0x1F4", "backendHandle": "0x280", "internalTransform": "0x290", "quaternionToEulerRva": "0x323AA10", "updateCallbackRva": "0x323DE30", "transformUpdateRva": "0x323CA60" },
     "related": ["type.photo_camera_config", "type.photo_camera_manager", "system.camera.freecam"],
     "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "Constructor, reflected factory, vtable, scheduled callbacks, field consumers, and transform publication were traced in the exact fingerprinted module." }],
-    "unknowns": ["Orientation axis order", "Complete input-state layout", "Safe external ownership", "Runtime activation prerequisites"]
+    "unknowns": ["Semantic names for orientation axes +0x70 and +0x78", "Complete input-state layout", "Safe external ownership", "Runtime activation prerequisites"]
   },
   {
     "id": "type.photo_camera_manager",
@@ -78,7 +78,7 @@
     "status": "under_development",
     "tags": ["camera", "photo-mode", "free-camera", "event", "activation", "call-chain"],
     "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
-    "offsets": { "eventCallbackRva": "0x33363C0", "dispatcherRva": "0x33328D0", "dispatcherEndRva": "0x3333088", "modeFiveBranchRva": "0x3332CC0", "activationCallerRva": "0x3336240", "activationCallSiteRva": "0x3332CFC", "managerInterfaceGlobalRva": "0xB486020", "interfaceVtableToggleSlot": "0x28", "freePhotoModeValue": 5 },
+    "offsets": { "eventSubscriptionVtableRva": "0xA116F90", "eventDispatchThunkRva": "0x33328C0", "eventCallbackRva": "0x33363C0", "dispatcherRva": "0x33328D0", "dispatcherEndRva": "0x3333088", "modeFiveBranchRva": "0x3332CC0", "activationCallerRva": "0x3336240", "activationCallSiteRva": "0x3332CFC", "freePhotoActionIdRva": "0xB3BEFB4", "freePhotoActionId": "0x81489DE8", "managerInterfaceGlobalRva": "0xB486020", "interfaceVtableToggleSlot": "0x28", "freePhotoModeValue": 5 },
     "related": ["call_chain.photo_camera.free_mode_toggle", "type.photo_camera_manager", "type.camera_free_photo_component", "system.camera.freecam"],
     "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "PE unwind metadata bounds the dispatcher at 0x33328D0-0x3333088. Its unique direct mode-5 branch calls 0x3336240, which emits mode 5, performs engine service checks, loads the published manager interface, and calls vtable slot +0x28." }],
     "unknowns": ["Symbolic event/action name", "Required game thread", "Exact service-check semantics", "Runtime component creation result", "Safe external invocation and teardown"]
@@ -92,7 +92,7 @@
     "status": "under_development",
     "tags": ["camera", "photo-mode", "manager", "helper", "lifecycle", "input"],
     "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" }],
-    "offsets": { "objectSize": "0x160", "constructorRva": "0x3333170", "typeTableRva": "0xA116FC0", "deleteThunkRva": "0x346C150", "initializeRva": "0x33271E0", "setModeRva": "0x3327130", "cleanupRva": "0x33279A0", "inputService": "0x20", "cameraContext": "0x28", "selectedMode": "0x38", "primaryTransitionToken": "0xC8", "eventSubscription": "0xD0", "modeRegistrationEnabled": "0x120", "secondaryTransitionToken": "0x14C", "freeModeTransitionToken": "0x154" },
+    "offsets": { "objectSize": "0x160", "constructorRva": "0x3333170", "typeTableRva": "0xA116FC0", "deleteThunkRva": "0x346C150", "initializeRva": "0x33271E0", "setModeRva": "0x3327130", "cleanupRva": "0x33279A0", "inputService": "0x20", "cameraContext": "0x28", "selectedMode": "0x38", "primaryTransitionToken": "0xC8", "eventSubscription": "0xD0", "eventSubscriptionObjectSize": "0x10", "eventSubscriptionVtableRva": "0xA116F90", "eventSubscriptionOwner": "0x08", "eventDispatchThunkRva": "0x33328C0", "stateCallbackThunkRva": "0x3333090", "modeRegistrationEnabled": "0x120", "secondaryTransitionToken": "0x14C", "freeModeTransitionToken": "0x154" },
     "related": ["type.photo_camera_manager", "call_chain.photo_camera.native_free_mode_activation", "call_chain.photo_camera.manager_lifecycle"],
     "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-runtime.md", "notes": "Manager setup allocates 0x160 bytes, constructs and initializes the helper, then stores it at interface +0x318. Teardown calls the dedicated cleanup path before nulling +0x318 and invoking the helper's delete thunk; the type table is immediately followed by the PhotoCameraManager literal." }],
     "unknowns": ["Formal source-level class distinction from CPhotoCameraManager", "Event subscription interface type", "Transition-token service type", "Required callback thread"]
