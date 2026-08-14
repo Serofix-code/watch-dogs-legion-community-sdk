@@ -195,5 +195,26 @@
     "related": ["type.photo_camera_manager_runtime_helper", "call_chain.photo_camera.native_free_mode_activation", "call_chain.photo_camera.manager_lifecycle", "system.camera.freecam"],
     "evidence": [{ "type": "call_site", "reference": "research/notes/photo-camera-action-registration.md", "notes": "Cross-renderer direct-call analysis finds only setup and dirty-flagged update callers; both registration routines select action identity from helper mode +0x38." }],
     "unknowns": ["Symbolic action names", "Dirty-state callback producer", "Input/event service type", "Callback thread", "Safe external registration or activation contract"]
+  },
+  {
+    "id": "command.photo_camera.request_close",
+    "kind": "command",
+    "name": "RequestClosePhotoCamera",
+    "summary": "A registered zero-argument command emits an owned 0x18-byte event through the engine's photo-camera event channel instead of directly tearing down the manager.",
+    "confidence": "confirmed",
+    "status": "under_development",
+    "tags": ["camera", "photo-mode", "command", "event", "close", "teardown", "lifecycle"],
+    "builds": [
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "moduleSha256": "086968CD9EC4D5939248846EAFA2DA72210FDDEB1164E79CBD08164313A0086E", "observed": "2026-08-14" },
+      { "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx12.dll", "moduleSha256": "E37381D67A7D7CDA377A90B05793E897A0D7321D1C568AD09C5882481AAC9EB6", "observed": "2026-08-14" }
+    ],
+    "offsets": { "argumentCount": 0, "eventObjectSize": "0x18", "dx11WrapperRva": "0x4247C90", "dx11EmitterRva": "0x4245C40", "dx11EventVtableRva": "0xA124760", "dx11ChannelGlobalRva": "0xB298D30", "dx12WrapperRva": "0x4247EE0", "dx12EmitterRva": "0x4245E90", "dx12EventVtableRva": "0xA1B37A0", "dx12ChannelGlobalRva": "0xB32DD30" },
+    "threading": "Engine command/event context required; exact thread remains unresolved.",
+    "related": ["type.photo_camera_manager", "call_chain.photo_camera.manager_lifecycle", "call_chain.photo_camera.scheduler_registration_destruction", "system.camera.freecam"],
+    "evidence": [
+      { "type": "string_reference", "reference": "research/notes/photo-camera-close-command.md", "notes": "Generated static initialization pairs the exact command name with matching DX11/DX12 wrappers." },
+      { "type": "call_site", "reference": "research/notes/photo-camera-close-command.md", "notes": "Both zero-argument wrappers call matching emitters that construct and submit a 0x18-byte owned event through build-specific channel globals." }
+    ],
+    "unknowns": ["Public command-registry invocation API", "Formal event payload type", "Dispatch thread", "Close acknowledgement", "Interruption behavior", "Matching open command"]
   }
 ]

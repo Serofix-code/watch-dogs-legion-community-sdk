@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.19.0 — Registered Photo-camera Close Command
+
+- Resolved `RequestClosePhotoCamera` from a loose string to its generated command-registration wrapper in both renderer builds.
+- Confirmed the command takes zero arguments.
+- Mapped its matching event emitters, event-object size, event vtables, and channel globals.
+- Confirmed normal close requests use engine-owned event dispatch rather than direct manager destruction.
+- Retained explicit unknowns for registry invocation, thread, acknowledgement, and a matching open command.
+
 ## v0.18.0 — Photo-camera Action Registration
 
 - Mapped the mode-dependent action-registration routine in both renderer builds.
