@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.10.0 — FreePhoto Input and Pitch Mapping
+
+- Confirmed FreePhoto pitch at component offset `+0x74` from quaternion extraction and configured pitch clamping.
+- Kept orientation axes `+0x70` and `+0x78` unnamed pending runtime coordinate correlation.
+- Changed read-only component observations to expose the confirmed pitch separately from unresolved axes.
+- Mapped the helper-owned input/event subscription object, dispatch thunk, owner back-pointer, and build-specific FreePhoto action identifier.
+- Kept companion integration disabled pending a live lifecycle observation.
+
 ## v0.9.1 — Runtime Helper Lifecycle
 
 - Identified and mapped the engine-owned `PhotoCameraManager` runtime helper created by outer manager setup.

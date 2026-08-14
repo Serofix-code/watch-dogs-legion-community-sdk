@@ -14,7 +14,9 @@ Confirmed field consumers in this build include:
 
 | Component offset | Meaning | Evidence |
 | --- | --- | --- |
-| `+0x70/+0x74/+0x78` | three orientation angles | sine/cosine transform construction and later backend update |
+| `+0x70` | orientation axis 0 (semantic name unresolved) | quaternion-to-Euler extraction and transform construction |
+| `+0x74` | pitch angle | quaternion-to-Euler middle-angle extraction and clamping against `fMinimumPitch`/`fMaximumPitch` |
+| `+0x78` | orientation axis 2 (semantic name unresolved) | quaternion-to-Euler extraction and transform construction |
 | `+0x188` | maximum distance from player | reflected name and movement/clamp path |
 | `+0x18C` | camera move speed | reflected name and movement-vector multiplication |
 | `+0x194/+0x198/+0x19C` | camera position XYZ | copied into the internal transform and passed to the backend camera |
@@ -23,7 +25,7 @@ Confirmed field consumers in this build include:
 | `+0x280` | backend camera handle | null checks and virtual update calls |
 | `+0x290` | internal transform structure | transform builder destination |
 
-The position layout is confirmed as a contiguous three-float vector. The three orientation fields are confirmed as angular inputs, but their semantic axis order is not yet runtime-validated. The movement path multiplies the component input vector by `fCameraMoveSpeed`, applies the camera basis, and later evaluates the configured player-distance limit.
+The position layout is confirmed as a contiguous three-float vector. RVA `0x323AA10` converts a quaternion to three Euler angles and stores them at `+0x70/+0x74/+0x78`. The middle result at `+0x74` is the pitch angle: the movement/orbit path clamps it directly against `fMinimumPitch` and `fMaximumPitch`. The semantic names for axes `+0x70` and `+0x78` remain unresolved because the engine's coordinate and quaternion convention is not yet runtime-correlated. The movement path multiplies the component input vector by `fCameraMoveSpeed`, applies the camera basis, and later evaluates the configured player-distance limit.
 
 ## CPhotoCameraManager
 
@@ -44,6 +46,8 @@ Setup allocates the object stored at interface `+0x318`; it is a concrete `0x160
 
 After construction, setup calls RVA `0x3327130` to apply the selected mode and RVA `0x33271E0` to acquire input/context services and install an event subscription. Confirmed helper fields include input service `+0x20`, camera context `+0x28`, selected mode `+0x38`, event subscription `+0xD0`, mode-registration byte `+0x120`, and transition tokens `+0xC8`, `+0x14C`, and `+0x154`. The native FreePhoto event path reads mode `+0x38` and retires/replaces token `+0x154`.
 
+The event subscription at helper `+0xD0` is a `0x10`-byte object. Its type table at RVA `0xA116F90` contains delete thunk RVA `0x346C120`, event-dispatch thunk RVA `0x33328C0`, and state-callback thunk RVA `0x3333090`; subscription offset `+0x08` points back to the owning helper. The dispatch thunk validates that owner and tail-jumps to RVA `0x33328D0`. This is the exact ownership edge between the engine input/event service and the bounded dispatcher.
+
 Teardown does not simply free this object. It first calls cleanup RVA `0x33279A0`, which releases camera/event context, resets input state, cancels all three mapped transition tokens, unregisters the event subscription, and clears owned service/context pointers. Only then does teardown null interface `+0x318` and call the helper's delete thunk. This strengthens the requirement to use the outer manager lifecycle instead of directly creating, deleting, or invoking the helper.
 
 The distinct toggle at RVA `0x3326A60` changes manager byte `+0x3E8` (interface byte `+0x100`). It requires manager pointers at `+0x348` and `+0x468`, conditionally checks `+0x478`, propagates the new mode to related systems, and invokes interface setup or teardown rather than directly fabricating a camera object. The static control flow and the dedicated `+0x28` interface slot strongly indicate that this is the native free-photo-mode route. It remains **strongly inferred**, not confirmed, until its state transition and component lifetime are observed in a running game.
@@ -58,7 +62,7 @@ Two ordinary consumers at RVAs `0x3332BD9` and `0x3336C18` load the published ma
 
 PE unwind metadata bounds a native event dispatcher at RVA `0x33328D0` through `0x3333088`. A single direct caller at RVA `0x33365CE`, inside callback RVA `0x33363C0`, copies the incoming engine event to a local buffer before entering that dispatcher.
 
-The dispatcher branch beginning at RVA `0x3332CC0` first matches a build-specific action identifier and requires manager/controller byte `+0x38` to equal mode `5`. It asks RVA `0x332A080` to construct or publish value `4`, stores the returned token at controller offset `+0x154`, checks a native prerequisite, and calls RVA `0x3336240` from RVA `0x3332CFC`.
+The dispatcher branch beginning at RVA `0x3332CC0` first matches the build-specific action identifier stored at RVA `0xB3BEFB4` (`0x81489DE8` in the fingerprinted module) and requires helper byte `+0x38` to equal mode `5`. The setup/registration routine at RVA `0x33337A0` selects the same identifier for mode `5`. The symbolic action name remains unresolved. The branch asks RVA `0x332A080` to construct or publish value `4`, stores the returned token at helper offset `+0x154`, checks a native prerequisite, and calls RVA `0x3336240` from RVA `0x3332CFC`.
 
 RVA `0x3336240` is the first mapped engine-owned activation caller above the guarded manager wrapper. It resolves live services, retires any token held at controller `+0x154`, asks RVA `0x332A080` to publish value `5`, performs two further service checks, loads the published manager interface at RVA `0xB486020`, and invokes vtable slot `+0x28`. This connects an ordinary event path to the previously mapped FreePhoto toggle without bypassing its availability guard.
 
