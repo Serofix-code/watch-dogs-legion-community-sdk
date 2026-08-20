@@ -36,3 +36,15 @@ The table/configuration labels explicitly describe Voice Profile as pitch/volume
 Search the live Lua/native inventory for `ChangePlayerGkModelFromHumanConfigAndVoiceActor` and its `_v1` variant. First perform a read-only symbol/string/xref scan, then identify valid voice-actor resource names from the engine-owned catalog. Do not pass guessed strings or a birthplace ID: an invalid resource can replace the player model or crash the session.
 
 This is a read-only research result. No new memory-write offset is claimed here.
+
+## Companion viewer behavior
+
+The v0.10.14 Voice Tags window now accepts the selected operative from Operative Studio and displays the
+currently readable mapped fields (persona, NPC voice actor, voice profile, and character deck), including
+the resolved label and raw value. Both the mapped field block and catalog rows can be copied. “Stage add”
+and “Stage remove” only record a local research selection; they intentionally do not write game memory.
+
+The `Accent.*` rows are not proof that tags are accent-only. `NPCVoice.FP_*` rows, persona tags, sound tags,
+and birthplace tags occupy related but distinct catalog namespaces. A male operative could theoretically
+have an unrelated tag, but no safe persistent tag-list owner or supported add/remove ABI has been identified,
+so arbitrary cross-category writes remain unresolved.
