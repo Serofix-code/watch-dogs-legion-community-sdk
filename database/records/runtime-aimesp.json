@@ -1,0 +1,15 @@
+[
+  {
+    "id": "system.runtime.aimesp_surface",
+    "kind": "system",
+    "name": "Experimental runtime aim/ESP surface",
+    "summary": "A source-backed helper surface probes bounded Human-agent enumeration, entity position/name/angle reads, angle writes, and entity highlight start/stop calls.",
+    "confidence": "inferred",
+    "status": "under_development",
+    "tags": ["runtime", "lua", "aim", "esp", "npc", "highlight"],
+    "builds": [{ "platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "observed": "2026-08-20", "notes": "Source-backed v7.27.1 helper lead; runtime availability must be probed per build." }],
+    "related": ["system.lua.game_thread_bridge", "lua_api.get_local_player_entity_id"],
+    "evidence": [{ "type": "call_site", "reference": "research/notes/runtime-trainer-aimesp-surface.md", "notes": "The local v7.27.1 helper probes the named globals and uses bounded batches; no public ABI or stable external call contract is claimed." }],
+    "unknowns": ["Exact entity-handle type", "SetEntityAngle axis and units", "Highlight lifetime/cleanup semantics", "Thread affinity", "Runtime success on other builds"]
+  }
+]

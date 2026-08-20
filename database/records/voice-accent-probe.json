@@ -1,0 +1,15 @@
+[
+  {
+    "id": "system.voice_accent_probe",
+    "kind": "system",
+    "name": "Voice and accent candidate fields",
+    "summary": "Read-only probe of player persona, voice profile, inactive voice actor, character deck, NPCVoiceTagCategory, and the native ChangePlayerGkModelFromHumanConfigAndVoiceActor lead.",
+    "confidence": "inferred",
+    "status": "under_development",
+    "tags": ["operative", "voice", "accent", "metadata", "research"],
+    "builds": [{"platform": "Windows x64", "distribution": "Steam", "module": "DuniaDemo_clang_64_dx11.dll", "observed": "2026-08-20", "notes": "Exact build profile is required before any runtime write."}],
+    "related": [],
+    "evidence": [{"type": "call_site", "reference": "research/notes/voice-accent-probe.md", "notes": "Table field labels and local metadata catalogs; no standalone country-accent field is claimed."}],
+    "unknowns": ["Which candidate changes spoken accent at runtime", "Individual tags under NPCVoiceTagCategory", "Valid HUMAN_CONFIG and VOICE_ACTOR resource formats", "Whether the voice bank is selected by persona, deck, or a separate engine object", "Thread and lifetime requirements for any future write"]
+  }
+]
