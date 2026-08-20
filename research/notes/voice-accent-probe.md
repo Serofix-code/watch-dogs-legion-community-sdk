@@ -8,6 +8,8 @@ The strongest new lead is the discovered runtime symbol `ChangePlayerGkModelFrom
 
 A read-only ASCII scan of the installed DX11 module also found the engine type/category string `tagcategoryNPCVoiceTagCategory`. This confirms that NPC voice tags exist as an engine tag category, but the scan did not expose individual accent names or a safe public enumeration function. It is a promising route for the next tag-database probe, not a writable offset.
 
+The public tag catalog does expose six `Accent.*` tags and six `NPCVoice.FP_*` tags. These are now shown in the companion's read-only Voice Tags research window. Their relationship to the 4-byte persona field and 16-byte NPC voice-actor field is unresolved; the matching names must not be assumed to be interchangeable.
+
 ## Native string neighborhood (DX11 build)
 
 The two native names occur at module string RVAs `0x0A11DFB8` and `0x0A11DFE8`. Nearby registered names include `ChangePlayerGkModelFromHumanConfig`, `AddPlayerTag`, `RemovePlayerTag`, `HasPlayerTag`, `TeleportEntity`, and `GetLocalCameraId`. This is useful call-site context, but these are string locations—not function entry points—and must not be patched or called as addresses.
