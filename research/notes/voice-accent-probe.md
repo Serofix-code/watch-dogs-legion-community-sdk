@@ -4,6 +4,8 @@
 
 The current evidence does **not** identify a standalone country-accent field. The operator data exposes several voice-related candidates:
 
+The strongest new lead is the discovered runtime symbol `ChangePlayerGkModelFromHumanConfigAndVoiceActor`. It explicitly accepts a `HUMAN_CONFIG` and a `VOICE_ACTOR` resource, which is a better path for testing alternate voice banks than directly editing the 8-byte pitch/modulation profile. Its resource formats, argument ABI, thread affinity, and relationship to persistent operative data remain unresolved.
+
 | Candidate | Observed size/role | Interpretation | Confidence |
 | --- | --- | --- | --- |
 | Player Voice Actor / Persona | 4 bytes | active operative voice/persona selection | STRONGLY INFERRED |
@@ -20,5 +22,9 @@ The table/configuration labels explicitly describe Voice Profile as pitch/volume
 2. Require a stable pointer chain and repeat the read across several frames.
 3. Correlate an observed voice change with exactly one field changing; treat simultaneous changes as unresolved.
 4. Do not write a new value until a candidate is uniquely correlated and the build/signature is validated.
+
+## New lead to probe
+
+Search the live Lua/native inventory for `ChangePlayerGkModelFromHumanConfigAndVoiceActor` and its `_v1` variant. First perform a read-only symbol/string/xref scan, then identify valid voice-actor resource names from the engine-owned catalog. Do not pass guessed strings or a birthplace ID: an invalid resource can replace the player model or crash the session.
 
 This is a read-only research result. No new memory-write offset is claimed here.
