@@ -6,6 +6,8 @@ The current evidence does **not** identify a standalone country-accent field. Th
 
 The strongest new lead is the discovered runtime symbol `ChangePlayerGkModelFromHumanConfigAndVoiceActor`. It explicitly accepts a `HUMAN_CONFIG` and a `VOICE_ACTOR` resource, which is a better path for testing alternate voice banks than directly editing the 8-byte pitch/modulation profile. Its resource formats, argument ABI, thread affinity, and relationship to persistent operative data remain unresolved.
 
+A read-only ASCII scan of the installed DX11 module also found the engine type/category string `tagcategoryNPCVoiceTagCategory`. This confirms that NPC voice tags exist as an engine tag category, but the scan did not expose individual accent names or a safe public enumeration function. It is a promising route for the next tag-database probe, not a writable offset.
+
 | Candidate | Observed size/role | Interpretation | Confidence |
 | --- | --- | --- | --- |
 | Player Voice Actor / Persona | 4 bytes | active operative voice/persona selection | STRONGLY INFERRED |
